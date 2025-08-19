@@ -4,7 +4,7 @@ The purpose of this research project is to investigate the offloading and hw acc
 ## Table of Contents
 - [DOCA SDK](#doca-sdk)
     - [Installation Instructions](#installation-instructions)
-    - [doca_comch API](#doca-comch-api)
+    - [doca_comch API](#doca_comch-api)
     - [Usage](#usage)
 - [ArmRAL](#armral)
     - [Installation Instructions](#installation-instructions-1)
