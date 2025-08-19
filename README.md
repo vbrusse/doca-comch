@@ -3,17 +3,17 @@ The purpose of this research project is to investigate the offloading and hw acc
 
 ## Table of Contents
 - [DOCA SDK](#doca-sdk)
-    - [Installation Instructions](#doca-installation-instructions)
+    - [Installation Instructions](#installation-instructions)
     - [doca_comch API](#doca-comch-api)
-    - [Usage](#doca-usage)
+    - [Usage](#usage)
 - [ArmRAL](#armral)
-    - [Installation Instructions](#armral-installation-instructions)
+    - [Installation Instructions](#installation-instructions-1)
     - [Library Creation](#library-creation)
     - [DPU-ArmRAL Integration](#dpu-armral-integration)
 - [OpenAirInterface (OAI)](#openairinterface-oai)
-    - [Installation Instructions](#oai-installation-instructions)
+    - [Installation Instructions](#installation-instructions-2)
     - [OAI-Host Integration](#oai-host-integration)
-    - [Usage](#oai-usage)
+    - [Usage](#usage-1)
 - [Experiments](#experiments)
 - [Contributing](#contributing)
 
