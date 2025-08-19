@@ -1,0 +1,96 @@
+#
+# Copyright (c) 2023-2024 NVIDIA CORPORATION & AFFILIATES, ALL RIGHTS RESERVED.
+#
+# This software product is a proprietary product of NVIDIA CORPORATION &
+# AFFILIATES (the "Company") and all right, title, and interest in and to the
+# software product, including all associated intellectual property rights, are
+# and shall remain exclusively with the Company.
+#
+# This software product is governed by the End User License Agreement
+# provided with the software product.
+#
+
+#
+# Filename: meson.build - configuration file for "The Meson Build System"
+#
+# Customized by: Vlademir Brusse
+#
+# Date: 2025/07/28
+#
+
+project('DOCA_LDPC', 'C', 'CPP',
+        # Get version number from file.
+        version: run_command(find_program('cat'),
+                files('/opt/mellanox/doca/applications/VERSION'), check: true).stdout().strip(),
+        license: 'Proprietary',
+        default_options: ['buildtype=debug'],
+        meson_version: '>= 0.61.2'
+)
+
+SAMPLE_NAME = 'nrLDPC'
+
+LIBRARY_NAME = 'ldpc_armral'
+STATIC_LIBRARY_NAME = LIBRARY_NAME + '_static'
+
+# Define the name for the shared library
+LIBRARY_NAME = 'ldpc_armral'
+
+# Comment this line to restore warnings of experimental DOCA features
+add_project_arguments('-D DOCA_ALLOW_EXPERIMENTAL_API', language: ['c', 'cpp'])
+
+sample_dependencies = []
+# Required for all DOCA programs
+sample_dependencies += dependency('doca-common')
+# The DOCA library of the sample itself
+sample_dependencies += dependency('doca-comch')
+# Utility DOCA library for executables
+sample_dependencies += dependency('doca-argp')
+
+# Source files for the LDPC shared library
+sample_srcs = [
+        # The sample itself
+        SAMPLE_NAME + '_encod_client/' + SAMPLE_NAME + '_encod.c',
+        # Main function for the sample's executable
+        SAMPLE_NAME + '_encod_client/' + SAMPLE_NAME + '_encod_client.c',
+        # The sample itself
+        SAMPLE_NAME + '_decod_client/' + SAMPLE_NAME + '_decod.c',
+        # Main function for the sample's executable
+        SAMPLE_NAME + '_decod_client/' + SAMPLE_NAME + '_decod_client.c',
+        # init call component
+        SAMPLE_NAME + '_init/' + SAMPLE_NAME + '_initcall.c',
+        # shutdown component
+        SAMPLE_NAME + '_shutdown/' + SAMPLE_NAME + '_shutdown.c',
+        # Common code for the DOCA library samples
+        'comch_ctrl_path_common.c',
+        'nrLDPC_common.c',
+        # Common code for all DOCA samples
+        '../common.c',
+]
+
+sample_inc_dirs  = []
+# Common DOCA library logic
+#sample_inc_dirs += include_directories('..')
+# Common DOCA logic (samples)
+#sample_inc_dirs += include_directories('../..')
+sample_inc_dirs += include_directories('..')
+# Common DOCA logic
+#sample_inc_dirs += include_directories('../../..')
+sample_inc_dirs += include_directories('../..')
+# Common DOCA logic (applications)
+#sample_inc_dirs += include_directories('../../../applications/common/')
+sample_inc_dirs += include_directories('../../applications/common/')
+
+# --- Build both shared and static libraries ---
+# Build the shared library
+shared_library(LIBRARY_NAME, sample_srcs,
+        c_args : '-Wno-missing-braces',
+        dependencies : sample_dependencies,
+        include_directories : sample_inc_dirs,
+        install: true)
+
+# Build the static library
+static_lib = static_library(STATIC_LIBRARY_NAME, sample_srcs,
+    c_args : '-Wno-missing-braces',
+    dependencies : sample_dependencies,
+    include_directories : sample_inc_dirs,
+    install: true)
