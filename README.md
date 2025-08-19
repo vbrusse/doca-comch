@@ -1,7 +1,7 @@
 # doca-comch
 The purpose of this research project is to investigate the offloading and hw acceleration of the compute-intensive LDPC function from the O-DU High-PHY layer of the 5G NR in a NVIDIA BlueField-3 DPU, according to O-RAN 7.2x split, to enhance this function performance (throughput, latency and energy efficiency).
 
-### Table of Contents
+## Table of Contents
 - [DOCA SDK](#doca-sdk)
     - [Installation Instructions](#doca-installation-instructions)
     - [doca_comch API](#doca-comch-api)
@@ -17,59 +17,58 @@ The purpose of this research project is to investigate the offloading and hw acc
 - [Experiments](#experiments)
 - [Contributing](#contributing)
 
-
-### DOCA SDK
+## DOCA SDK
 
 Content for DOCA SDK.
 
-#### Installation Instructions
+### Installation Instructions
 
 DOCA installation content.
 
-#### doca_comch API
+### doca_comch API
 
 doca_comch content here...
 
-#### Usage
+### Usage
 
 DOCA usage content.
 
-### ArmRAL
+## ArmRAL
 
 Content here...
 
-#### Installation Instructions
+### Installation Instructions
 
 Content here...
 
-#### Library Creation
+### Library Creation
 
 Content here...
 
-#### DPU-ArmRAL Integration
+### DPU-ArmRAL Integration
 
 Content here...
 
-### OpenAirInterface (OAI)
+## OpenAirInterface (OAI)
 
 Content for OAI.
 
-#### Installation Instructions
+### Installation Instructions
 
 OAI installation content.
 
-#### OAI-Host Integration
+### OAI-Host Integration
 
 OAI integration content here...
 
-#### Usage
+### Usage
 
 OAI usage content.
 
-### Experiments
+## Experiments
 
 Content here...
 
-### Contributing
+## Contributing
 
 Contribution guidelines.
