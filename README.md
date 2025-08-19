@@ -5,9 +5,11 @@ The purpose of this research project is to investigate the offloading and hw acc
 
 - [DOCA SDK](#doca-sdk)
     - [Installation Instructions](#doca-installation-instructions)
+    - [Host - DPU Integration](#doca-integration)
     - [Usage](#doca-usage)
 - [OpenAirInterface (OAI)](#openairinterface-oai)
     - [Installation Instructions](#oai-installation-instructions)
+    - [OAI - Host Integration](#oai-integration)
     - [Usage](#oai-usage)
 - [Contributing](#contributing)
 
@@ -16,6 +18,10 @@ The purpose of this research project is to investigate the offloading and hw acc
 Write something here..
 
 ### DOCA Installation Instructions
+
+Write something here..
+
+### Host - DPU Integration
 
 Write something here..
 
@@ -31,6 +37,10 @@ Write something here..
 
 Write something here..
 
+### OAI - Host Integration
+
+Write something here..
+
 ### OAI Usage
 
 Write something here..
@@ -39,9 +49,3 @@ Write something here..
 
 Write something here..
 
-### Usage {#usage-1}
-
-Write something here..
-
-### Contributing {#contributing}
-Write something here..
