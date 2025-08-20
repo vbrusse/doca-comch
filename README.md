@@ -27,6 +27,40 @@ Content for DOCA SDK.
 
 DOCA installation content.
 
+## Project Structure
+
+```
+my-project/
+├── src/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── models/
+│   │   ├── user.py
+│   │   └── database.py
+│   └── utils/
+│       ├── helpers.py
+│       └── validators.py
+├── tests/
+│   ├── test_models.py
+│   └── test_utils.py
+├── docs/
+│   ├── API.md
+│   └── GUIDE.md
+├── images/
+│   ├── architecture.jpg
+│   └── workflow.png
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+### Key Directories:
+- `src/` - Source code
+- `tests/` - Test files
+- `docs/` - Documentation
+- `images/` - Image assets
+
+
 ### doca_comch API
 
 doca_comch content here...
