@@ -21,10 +21,7 @@ The purpose of this research project is to investigate the offloading and hw acc
 
 Content for DOCA SDK.
 
-<figure>
-  <img src="./images/architecture.jpg" alt="DOCA SDK Architecture Diagram" width="500">
-  <figcaption>Figure 1: DOCA SDK Architecture Overview</figcaption>
-</figure>
+![DOCA Architecture Overview](./images/doca-software.jpg)
 
 ### Installation Instructions
 
