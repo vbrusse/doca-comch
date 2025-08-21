@@ -34,43 +34,43 @@ DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA comp
 ```
 ├── client/
 │   └── opt/
-|       └── mellanox/
-│           └── doca/
-│               ├── applications/
-│               ├── include/
-|               ├── infrastructure/
-|               ├── lib/
-|               ├── samples/
-|               |   ├── common.c
-|               |   ├── common.h
-|               |   ├── .../
-|               |   ├── doca_comch/
-|               |   |   ├── comch_ctrl_path_common.c
-|               |   |   ├── comch_ctrl_path_common.h
-|               |   |   ├── comch_data_path_high_speed_common.c
-|               |   |   ├── comch_data_path_high_speed_common.h
-|               |   |   ├── meson.build
-|               |   |   ├── nrLDPC_common.c
-|               |   |   ├── nrLDPC_common.h
-|               |   ├── nrLDPC_decod_client/
-|               |   |   ├── meson.build
-|               |   |   ├── nrLDPC_decod.c
-|               |   |   └── nrLDPC_decod_client.c
-|               |   ├── nrLDPC_defs.h
-|               |   ├── nrLDPC_encod_client/
-|               |   |   ├── meson.build
-|               |   |   ├── nrLDPC_encod.c
-|               |   |   └── nrLDPC_encod_client.c
-|               |   ├── nrLDPC_init/
-|               |   |   ├── meson.build
-|               |   |   └── nrLDPC_initcall.c
-|               |   ├── nrLDPC_shutdown/
-|               |   |   ├── meson.build
-|               |   |   └── nrLDPC_shutdown.c
-|               |   └── vDU/
-|               |       ├── meson.build
-|               |       └── vdu_high_phy_ldpc_codes.c
-|               └── tools/
+|   |   └── mellanox/
+│   |       └── doca/
+│   |           ├── applications/
+│   |           ├── include/
+|   |           ├── infrastructure/
+|   |           ├── lib/
+|   |           ├── samples/
+|   |           |   ├── common.c
+|   |           |   ├── common.h
+|   |           |   ├── .../
+|   |           |   ├── doca_comch/
+|   |           |   |   ├── comch_ctrl_path_common.c
+|   |           |   |   ├── comch_ctrl_path_common.h
+|   |           |   |   ├── comch_data_path_high_speed_common.c
+|   |           |   |   ├── comch_data_path_high_speed_common.h
+|   |           |   |   ├── meson.build
+|   |           |   |   ├── nrLDPC_common.c
+|   |           |   |   ├── nrLDPC_common.h
+|   |           |   ├── nrLDPC_decod_client/
+|   |           |   |   ├── meson.build
+|   |           |   |   ├── nrLDPC_decod.c
+|   |           |   |   └── nrLDPC_decod_client.c
+|   |           |   ├── nrLDPC_defs.h
+|   |           |   ├── nrLDPC_encod_client/
+|   |           |   |   ├── meson.build
+|   |           |   |   ├── nrLDPC_encod.c
+|   |           |   |   └── nrLDPC_encod_client.c
+|   |           |   ├── nrLDPC_init/
+|   |           |   |   ├── meson.build
+|   |           |   |   └── nrLDPC_initcall.c
+|   |           |   ├── nrLDPC_shutdown/
+|   |           |   |   ├── meson.build
+|   |           |   |   └── nrLDPC_shutdown.c
+|   |           |   └── vDU/
+|   |           |       ├── meson.build
+|   |           |       └── vdu_high_phy_ldpc_codes.c
+|   |           └── tools/
 ├── server/
 │   └── opt/
 |       └── mellanox/
@@ -92,6 +92,72 @@ DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA comp
 └── README.md
 ```
 
+#### Compilation
+To compile and build the doca_comch servers:
+
+##### Host build commands
+
+```bash
+cd /opt/mellanox/doca/services/doca_comch
+meson /tmp/build
+ninja -C /tmp/build
+```
+##### DPU build commands
+```bash
+# For LDPC Decoder Server
+cd /opt/mellanox/doca/services/doca_comch/nrLDPC_decod_server
+meson /tmp/build
+ninja -C /tmp/build
+
+# For LDPC Encoder Server  
+cd /opt/mellanox/doca/services/doca_comch/nrLDPC_encod_server
+meson /tmp/build
+ninja -C /tmp/build
+```
+The generated servers are located under the /tmp/build/ directory.
+
+```bash
+# host
+cd /tmp/build
+ls -la
+    compile_commands.json
+    .gitignore
+    .hgignore
+    libldpc_armral.so
+    libldpc_armral.so.p
+    libldpc_armral_static.a
+    libldpc_armral_static.a.p
+    meson-info
+    meson-logs
+    meson-private
+    .ninja_deps
+    .ninja_log
+
+# DPU
+cd /tmp/build
+ls -la
+
+
+
+```
+The library libldpc_armral.so (host side) will be built again when the OAI 5G NR executables are generated.
+
+#### Running the doca_comch server and client
+First start running the server on DPU side:
+```bash
+# For LDPC Decoder Server
+cd /tmp/build
+    ./nrLDPC_decod_server -p 03:00.0 -r 03:00.0
+
+# For LDPC Encoder Server  
+cd /tmp/build
+    ./nrLDPC_encod_server -p 03:00.0 -r 03:00.0
+```
+The OAI 5G CN stack shall be running and the servers nrLDPC_decod_server and nrLDPC_encod_server (DPU side) with the Arm LDPC kernels implementation shall be started (this order does not matter), and then the entire OAI 5G NR stack shall be brought up and running (with the gNB and the nrUE). All components will be running on the same host.
+
+The nrUE (nr-uesoftmodem) shall be started with the flag '--loader.ldpc.shlibversion _armral' that indicates the OAI Loader to load and executed the customized 'libldpc_armral.so' instead of the standard ldpc library from OAI. This is the doca_comch shared library that contains the clients nrLDPC_decod_client and nrLDPC_encod_client that implement the OAI interfaces.
+
+When a LDPC decoding (Downlink) or a LDPC encoding (Uplink) function call happens in the OAI stack (DU High-PHY layer) the doca_comch client (host side) will be called to offload the LDPC function on DPU (server) and the function will be run on Arm multicore CPUs properly.
 
 
 ### doca_comch API
