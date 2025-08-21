@@ -25,40 +25,73 @@ Content for DOCA SDK.
 
 ### Installation Instructions
 
-DOCA installation content.
+Installation instructions for both host and BlueField image can be found in the [DOCA Installation Guide for Linux](https://docs.nvidia.com/doca/sdk/DOCA+Installation+Guide+for+Linux).
+
+DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA components is found under the /opt/mellanox/doca directory. These include the traditional SDK-related components (libraries, header files, etc.) as well as the DOCA samples, applications and tools.
 
 ## Project Structure
 
 ```
-my-project/
-├── src/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── models/
-│   │   ├── user.py
-│   │   └── database.py
-│   └── utils/
-│       ├── helpers.py
-│       └── validators.py
-├── tests/
-│   ├── test_models.py
-│   └── test_utils.py
-├── docs/
-│   ├── API.md
-│   └── GUIDE.md
+├── client/
+│   └── opt/
+|       └── mellanox/
+│           └── doca/
+│               ├── applications/
+│               ├── include/
+|               ├── infrastructure/
+|               ├── lib/
+|               ├── samples/
+|               |   ├── common.c
+|               |   ├── common.h
+|               |   ├── .../
+|               |   ├── doca_comch/
+|               |   |   ├── comch_ctrl_path_common.c
+|               |   |   ├── comch_ctrl_path_common.h
+|               |   |   ├── comch_data_path_high_speed_common.c
+|               |   |   ├── comch_data_path_high_speed_common.h
+|               |   |   ├── meson.build
+|               |   |   ├── nrLDPC_common.c
+|               |   |   ├── nrLDPC_common.h
+|               |   ├── nrLDPC_decod_client/
+|               |   |   ├── meson.build
+|               |   |   ├── nrLDPC_decod.c
+|               |   |   └── nrLDPC_decod_client.c
+|               |   ├── nrLDPC_defs.h
+|               |   ├── nrLDPC_encod_client/
+|               |   |   ├── meson.build
+|               |   |   ├── nrLDPC_encod.c
+|               |   |   └── nrLDPC_encod_client.c
+|               |   ├── nrLDPC_init/
+|               |   |   ├── meson.build
+|               |   |   └── nrLDPC_initcall.c
+|               |   ├── nrLDPC_shutdown/
+|               |   |   ├── meson.build
+|               |   |   └── nrLDPC_shutdown.c
+|               |   └── vDU/
+|               |       ├── meson.build
+|               |       └── vdu_high_phy_ldpc_codes.c
+|               └── tools/
+├── server/
+│   └── opt/
+|       └── mellanox/
+│           └── doca/
+│               ├── applications/
+│               ├── include/
+|               ├── infrastructure/
+|               ├── lib/
+|               ├── samples/
+|               |   ├── common.c
+|               |   ├── common.h
+|               |   ├── .../
+|               |   ├── doca_comch/
+|               |   |   ├──
+|               |   |   ├── 
+|               └── tools/
 ├── images/
-│   ├── architecture.jpg
-│   └── workflow.png
-├── requirements.txt
-├── .gitignore
+│   └── doca-software.jpg
 └── README.md
 ```
 
-### Key Directories:
-- `src/` - Source code
-- `tests/` - Test files
-- `docs/` - Documentation
-- `images/` - Image assets
 
 
 ### doca_comch API
