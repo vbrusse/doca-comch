@@ -157,7 +157,7 @@ The OAI 5G CN stack shall be running and the servers nrLDPC_decod_server and nrL
 
 The nrUE (nr-uesoftmodem) shall be started with the flag '--loader.ldpc.shlibversion _armral' that indicates the OAI Loader to load and executed the customized 'libldpc_armral.so' instead of the standard ldpc library from OAI. This is the doca_comch shared library that contains the clients nrLDPC_decod_client and nrLDPC_encod_client that implement the OAI interfaces.
 
-When a LDPC decoding (Downlink) or a LDPC encoding (Uplink) function call happens in the OAI stack (DU High-PHY layer) the doca_comch client (host side) will be called to offload the LDPC function on DPU (server) and the function will be run on Arm multicore CPUs properly.
+When a LDPC decoding (Uplink) or a LDPC encoding (Downlink) function call happens in the OAI stack (DU High-PHY layer) the doca_comch client (host side) will be called to offload the LDPC function on DPU (server) and the function will be run on Arm multicore CPUs properly.
 
 
 ### doca_comch API
