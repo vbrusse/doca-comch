@@ -179,7 +179,9 @@ ArmRAL provides optimized signal processing and related maths functions for enab
 * Encoding and decoding schemes, including Polar, Low-Density Parity Check (LDPC), and Turbo.
 * Compression and decompression.
 
-[Download ArmRAL from ](https://gitlab.arm.com/networking/ral).
+This project uses the ArmRAL Low-Density Parity Check (LDPC) decoding and encoding functions.
+
+Download ArmRAL from [ArmRAL GitLab](https://gitlab.arm.com/networking/ral) or from [ArmRAL Releases](https://gitlab.arm.com/networking/ral/-/releases).
 
 ### Installation Instructions
 
