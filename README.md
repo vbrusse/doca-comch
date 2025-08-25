@@ -174,11 +174,7 @@ Content here...
 
 ### Installation Instructions
 
-Content here...
-
-### Library Creation
-
-Content here...
+The tutorial to build and install the Arm RAN Acceleration Library (ArmRAL) can be found in the [Get started with Arm RAN Acceleration Library](https://developer.arm.com/documentation/102249/2401/Tutorials/Get-started-with-Arm-RAN-Acceleration-Library--ArmRAL-).
 
 ### DPU-ArmRAL Integration
 
