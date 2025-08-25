@@ -170,7 +170,16 @@ DOCA usage content.
 
 ## ArmRAL
 
-Content here...
+ArmRAL provides optimized signal processing and related maths functions for enabling 5G Radio Access Network (RAN) deployments. It leverages the efficient vector units available on Arm cores that support the Armv8-a architecture to accelerate 5G NR signal processing workloads, including:
+
+* Matrix and vector arithmetic, such as matrix multiplication.
+* Fast Fourier Transforms (FFTs).
+* Digital modulation and demodulation.
+* Cyclic Redundancy Check (CRC).
+* Encoding and decoding schemes, including Polar, Low-Density Parity Check (LDPC), and Turbo.
+* Compression and decompression.
+
+[Download ArmRAL from ](https://gitlab.arm.com/networking/ral).
 
 ### Installation Instructions
 
