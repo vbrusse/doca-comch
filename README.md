@@ -323,10 +323,10 @@ OAI usage content.
 
 ## Acceleration
 * Hardware
-      * RoCE/IB
-      * 200 Gbps (InfiniBand)
-      * dmma (shared memory)
-      * zero copy
+  * RoCE/IB
+  * 200 Gbps (InfiniBand)
+  * dmma (shared memory)
+  * zero copy
   
 * Producer / Consumer model - Producers generate tasks (data or events), and Consumers process the tasks (data or events)
 * Software parallelized with Pthreads (POSIX Threads) lib - multithreading programming
