@@ -322,12 +322,16 @@ OAI integration content here...
 OAI usage content.
 
 ## Acceleration
-* Hardware
+* DPU Hardware
   * RoCE/IB
   * 200 Gbps (InfiniBand)
   * dmma (shared memory)
   * zero copy
-  
+  * Arm NEON CPU intrinsics
+    * architecture
+    * Instructions set
+    * SIMD
+    * Vector programming
 * Producer / Consumer model - Producers generate tasks (data or events), and Consumers process the tasks (data or events)
 * Software parallelized with Pthreads (POSIX Threads) lib - multithreading programming
 * Thread Pool to handle task queue
