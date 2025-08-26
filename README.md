@@ -18,11 +18,11 @@ The purpose of this research project is to investigate the offloading and hw acc
 - [OpenAirInterface (OAI)](#openairinterface-oai)
     - [Core Components](#core-components)
     - [OAI and Functional Splits](#oai-and-functional-splits)
-    - [O-RAN 7.2x Split](#o-ran-7.2x-split)
+    - [O-RAN 7.2x Split](#o-ran-72x-split)
     - [3GPP Split 2](#3gpp-split-2)
     - [Installation Instructions](#installation-instructions-2)
     - [OAI-Host Integration](#oai-host-integration)
-    - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-OAI-5GC,-gNB-and-nrUE)
+    - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-OAI-5GC-gNB-and-nrUE)
 - [Experiments](#experiments)
 - [Contributing](#contributing)
 
@@ -204,7 +204,7 @@ The DOCA Comch Data Path Client/Server sets up a client-server connection betwee
 
 The connection is used to create a producer and consumer on both sides to communicate across the two fastpath connections.
 
-The logic includes:
+Basically, the logic includes:
 
 1. Locates the DOCA device.
 2. Initializes the core DOCA structures.
