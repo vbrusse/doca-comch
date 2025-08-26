@@ -6,6 +6,8 @@ The purpose of this research project is to investigate the offloading and hw acc
 - [DOCA SDK](#doca-sdk)
     - [Installation Instructions](#installation-instructions)
     - [doca_comch API](#doca_comch-api)
+    - [DOCA Comch Data Path Client/Server](#doca-comch-data-pat-client-Server)
+    - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-client-server)
     - [Usage](#usage)
 - [ArmRAL](#armral)
     - [Installation Instructions](#installation-instructions-1)
@@ -37,7 +39,9 @@ The purpose of this research project is to investigate the offloading and hw acc
 
 ## DOCA SDK
 
-Content for DOCA SDK.
+This project makes usage of the NVIDIA DOCA™ Framework, which has compound by DOCA SDK to create and deliver applications and services on top of the BlueField networking platform. The project uses the harnessing the power of NVIDIA's BlueField-3 DPU (Data Processing Unit) to offload and accelerate a 5G NR High-PHY layer function. A DOCA SDK Overview is in [DOCA Overview](https://docs.nvidia.com/doca/sdk/doca+overview/index.html).
+
+The offloading and hw acceleration was developed based on an NVIDIA® BlueField®-accelerated application (DOCA Communication Channel API) and the drivers for both the host and DPU.
 
 ![DOCA Architecture Overview](./images/doca-software.jpg)
 
@@ -126,7 +130,7 @@ ninja -C /tmp/build
 
 ##### DPU build commands
 
-* doca_comch server
+* doca_comch servers
     
 ```bash
 # For LDPC Decoder Server
@@ -142,7 +146,7 @@ ninja -C /tmp/build
 
 The generated servers are located under the /tmp/build/ directory.
 
-* doca_comch client
+* doca_comch clients
 
 ```bash
 # host
@@ -176,10 +180,36 @@ The library libldpc_armral.so (host side) will be built again when the OAI 5G NR
 
 ### doca_comch API
 
-doca_comch content here...
+DOCA Comch provides a communication channel between client applications on the host and servers on the BlueField Arm. It introduces features such as high-performance data path over the consumer-producer API, as well as working with DOCA progress engine and other standard DOCA Core objects.
+
+Benefits of using DOCA Comch:
+
+* Security – the communication channel is isolated from the network
+
+* Network independent – the state of the communication channel does not depend on the state and configuration of the network
+
+* High bandwidth, low latency, zero-copy, multi-producer, multi-consumer API
 
 
-### Running the doca_comch server and client
+#### DOCA Comch Data Path Client/Server
+
+The DOCA Comch Data Path Client/Server sets up a client-server connection between the host and BlueField Arm.
+
+The connection is used to create a producer and consumer on both sides to communicate across the two fastpath connections.
+
+The logic includes:
+
+1. Locates the DOCA device.
+2. Initializes the core DOCA structures.
+3. Initializes and configures client/server contexts.
+4. Initializes and configures producer/consumer contexts on top of an established connection.
+5. Submits post-receive tasks for population by producers.
+6. Submits send tasks from producers to write to consumers.
+7. Stops and destroys producer/consumer objects.
+8. Stops and destroys client/server objects.
+
+
+### Running the DOCA Comch Data Path Client/Server
 
 First start running the server on DPU side:
 
@@ -206,7 +236,7 @@ When a LDPC decoding (Uplink) or a LDPC encoding (Downlink) function call happen
 
 ## ArmRAL
 
-ArmRAL is an open-source software library that provides building blocks (functions or kernels) required by RAN L1 that run on CPU for optimized signal processing and related maths functions for enabling 5G Radio Access Network (RAN) deployments. It leverages the efficient vector units available on Arm cores that support the Armv8-a architectures (Neon, SVE, SVE2 …) and SIMD/Vector capabilities, offering an API that can be integrate into L1 stack to accelerate 5G NR signal processing workloads. As functions/kernels include:
+ArmRAL is an open-source software library that provides building blocks (functions or kernels) required by RAN L1 that run on CPU for optimized signal processing and related maths functions for enabling 5G Radio Access Network (RAN) deployments. It leverages the efficient vector units available on Arm cores that support the Armv8-a architectures (Neon, SVE, SVE2 …) and SIMD/Vector capabilities, offering an API that can be integrate into L1 stack to accelerate 5G NR signal processing workloads. The functions/kernels include:
 
 * Matrix and vector arithmetic, such as matrix multiplication.
 * Fast Fourier Transforms (FFTs).
@@ -245,7 +275,7 @@ OpenAirInterface is divided into two main parts that work together to form a cel
 These functional splits are a core concept of Open RAN (O-RAN) because they allow for interoperability between different vendors. OpenAirInterface is a powerful tool for exploring these splits.
 
 
-### OAI and Fucntional Splits
+### OAI and Functional Splits
 
 OAI implements the two most common splits, O-RAN 7.2x and 3GPP split 2.
 
