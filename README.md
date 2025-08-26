@@ -6,9 +6,12 @@ The purpose of this research project is to investigate the offloading and hw acc
 - [DOCA SDK](#doca-sdk)
     - [Installation Instructions](#installation-instructions)
     - [Project Structure](#project-structure)
+          - [Compilation](#compilation)
+              - [Host build commands](#host-build-commands)
+              - [DPU build commands](#dpu-build-commands)
     - [doca_comch API](#doca_comch-api)
-    - [DOCA Comch Data Path Client/Server](#doca-comch-data-path-client/Server)
-    - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-client/server)
+    - [DOCA Comch Data Path Client/Server](#doca-comch-data-path-client-Server)
+    - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-client-server)
 - [ArmRAL](#armral)
     - [Installation Instructions](#installation-instructions-1)
     - [DPU-ArmRAL Integration](#dpu-armral-integration)
@@ -122,7 +125,7 @@ DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA comp
 
 #### Compilation
 
-To compile and build the doca_comch servers:
+To compile and build the doca_comch API:
 
 ##### Host build commands
 
