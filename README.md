@@ -328,7 +328,7 @@ OAI usage content.
       * dmma (shared memory)
       * zero copy
   
-* Producer / Consumer model
+* Producer / Consumer model - Producers generate tasks (data or events), and Consumers process the tasks (data or events)
 * Software parallelized with Pthreads (POSIX Threads) lib - multithreading programming
 * Thread Pool to handle task queue
 
