@@ -22,6 +22,7 @@ The purpose of this research project is to investigate the offloading and hw acc
     - [Installation Instructions](#installation-instructions-2)
     - [OAI-Host Integration](#oai-host-integration)
     - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-OAI-5GC-gNB-and-nrUE)
+- [Acceleration](#acceleration)
 - [Experiments](#experiments)
 - [Contributing](#contributing)
 
@@ -319,6 +320,18 @@ OAI integration content here...
 ### Instantiation of OAI 5GC, gNB and nrUE
 
 OAI usage content.
+
+## Acceleration
+* Hardware
+      * RoCE/IB
+      * 200 Gbps (InfiniBand)
+      * dmma (shared memory)
+      * zero copy
+  
+* Producer / Consumer model
+* Software parallelized with Pthreads (POSIX Threads) lib - multithreading programming
+* Thread Pool to handle task queue
+
 
 ## Experiments
 
