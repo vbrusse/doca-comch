@@ -191,10 +191,10 @@ DOCA Comch provides a communication channel between client applications on the h
 Benefits of using DOCA Comch:
 
 * Security – the communication channel is isolated from the network
-
 * Network independent – the state of the communication channel does not depend on the state and configuration of the network
-
 * High bandwidth, low latency, zero-copy, multi-producer, multi-consumer API
+
+DOCA Communication Channel library let you set a direct communication channel between the host and the DPU. The channel is run over RoCE/IB protocol and is not part of the TCP/IP stack.
 
 
 #### DOCA Comch Data Path Client/Server
@@ -237,8 +237,7 @@ The OAI 5G CN stack shall be running and the servers nrLDPC_decod_server and nrL
 
 The nrUE (nr-uesoftmodem) shall be started with the flag '--loader.ldpc.shlibversion _armral' that indicates the OAI Loader to load and executed the customized 'libldpc_armral.so' instead of the standard ldpc library from OAI. This is the doca_comch shared library that contains the clients nrLDPC_decod_client and nrLDPC_encod_client that implement the OAI interfaces.
 
-When a LDPC decoding (Uplink) or a LDPC encoding (Downlink) function call happens in the OAI stack (DU High-PHY layer) the doca_comch client (host side) will be called to offload the LDPC function on DPU (server) and the function will be run on Arm multicore CPUs properly.
-
+When a 5G OAI DU High-PHY layer needs to perform LDPC decoding (for the uplink) or encoding (for the downlink), it calls a function in the shared library libldpc_armral.so. This library, loaded by the OAI Loader, then offloads the LDPC task from the host CPU to a DPU server. The DOCA Comch client on the host communicates through a established PCIe communication channel with the DOCA Comch server on the DPU to handle this offload. Once offloaded, the ArmRAL LDPC kernel runs efficiently on the DPU's Arm multicore CPUs.
 
 ## ArmRAL
 
