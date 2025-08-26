@@ -5,6 +5,7 @@ The purpose of this research project is to investigate the offloading and hw acc
 - [Requirements](#requirements)
 - [DOCA SDK](#doca-sdk)
     - [Installation Instructions](#installation-instructions)
+    - [Project Structure](#project-structure)
     - [doca_comch API](#doca_comch-api)
     - [DOCA Comch Data Path Client/Server](#doca-comch-data-path-client/Server)
     - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-client/server)
