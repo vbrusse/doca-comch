@@ -1,5 +1,5 @@
 # doca-comch
-The purpose of this research project is to investigate the offloading and hw acceleration of the compute-intensive LDPC function from the O-DU High-PHY layer of the 5G NR in a NVIDIA BlueField-3 DPU, according to O-RAN 7.2x split, to enhance this function performance (throughput, latency and energy efficiency).
+The purpose of this research project is to investigate the offloading and hw acceleration of the compute-intensive LDPC function from the O-DU High-PHY layer of the 5G NR in a NVIDIA BlueField-3 DPU, according to O-RAN 7.2x split, to enhance the function performance (throughput, latency and energy efficiency).
 
 ## Table of Contents
 - [Requirements](#requirements)
@@ -34,17 +34,20 @@ The purpose of this research project is to investigate the offloading and hw acc
     * OAI
         * Linux Low-latency Kernel
 
+
 ## DOCA SDK
 
 Content for DOCA SDK.
 
 ![DOCA Architecture Overview](./images/doca-software.jpg)
 
+
 ### Installation Instructions
 
 Installation instructions for both host and BlueField image can be found in the [DOCA Installation Guide for Linux](https://docs.nvidia.com/doca/sdk/DOCA+Installation+Guide+for+Linux).
 
 DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA components is found under the /opt/mellanox/doca directory. These include the traditional SDK-related components (libraries, header files, etc.) as well as the DOCA samples, applications and tools.
+
 
 ## Project Structure
 
@@ -110,6 +113,7 @@ DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA comp
 ```
 
 #### Compilation
+
 To compile and build the doca_comch servers:
 
 ##### Host build commands
@@ -119,7 +123,11 @@ cd /opt/mellanox/doca/services/doca_comch
 meson /tmp/build
 ninja -C /tmp/build
 ```
+
 ##### DPU build commands
+
+* doca_comch server
+    
 ```bash
 # For LDPC Decoder Server
 cd /opt/mellanox/doca/services/doca_comch/nrLDPC_decod_server
@@ -131,7 +139,10 @@ cd /opt/mellanox/doca/services/doca_comch/nrLDPC_encod_server
 meson /tmp/build
 ninja -C /tmp/build
 ```
+
 The generated servers are located under the /tmp/build/ directory.
+
+* doca_comch client
 
 ```bash
 # host
@@ -157,33 +168,41 @@ ls -la
 
 
 ```
+
+The generated clients are located under the /tmp/build/ directory.
+
 The library libldpc_armral.so (host side) will be built again when the OAI 5G NR executables are generated.
-
-#### Running the doca_comch server and client
-First start running the server on DPU side:
-```bash
-# For LDPC Decoder Server
-cd /tmp/build
-    ./nrLDPC_decod_server -p 03:00.0 -r 03:00.0
-
-# For LDPC Encoder Server  
-cd /tmp/build
-    ./nrLDPC_encod_server -p 03:00.0 -r 03:00.0
-```
-The OAI 5G CN stack shall be running and the servers nrLDPC_decod_server and nrLDPC_encod_server (DPU side) with the Arm LDPC kernels implementation shall be started (this order does not matter), and then the entire OAI 5G NR stack shall be brought up and running (with the gNB and the nrUE). All components will be running on the same host.
-
-The nrUE (nr-uesoftmodem) shall be started with the flag '--loader.ldpc.shlibversion _armral' that indicates the OAI Loader to load and executed the customized 'libldpc_armral.so' instead of the standard ldpc library from OAI. This is the doca_comch shared library that contains the clients nrLDPC_decod_client and nrLDPC_encod_client that implement the OAI interfaces.
-
-When a LDPC decoding (Uplink) or a LDPC encoding (Downlink) function call happens in the OAI stack (DU High-PHY layer) the doca_comch client (host side) will be called to offload the LDPC function on DPU (server) and the function will be run on Arm multicore CPUs properly.
 
 
 ### doca_comch API
 
 doca_comch content here...
 
-### Usage
 
-DOCA usage content.
+### Running the doca_comch server and client
+
+First start running the server on DPU side:
+
+```bash
+# For LDPC Decoder Server
+cd /tmp/build
+    ./nrLDPC_decod_server -p 03:00.0 -r 03:00.0
+```
+
+after that, the client on host side:
+
+```bash
+# For LDPC Encoder Server  
+cd /tmp/build
+    ./nrLDPC_encod_server -p 03:00.0 -r 03:00.0
+```
+
+The OAI 5G CN stack shall be running and the servers nrLDPC_decod_server and nrLDPC_encod_server (DPU side) with the Arm LDPC kernels implementation shall be started (this order does not matter), and then the entire OAI 5G NR stack shall be brought up and running (with the gNB and the nrUE). All components will be running on the same host.
+
+The nrUE (nr-uesoftmodem) shall be started with the flag '--loader.ldpc.shlibversion _armral' that indicates the OAI Loader to load and executed the customized 'libldpc_armral.so' instead of the standard ldpc library from OAI. This is the doca_comch shared library that contains the clients nrLDPC_decod_client and nrLDPC_encod_client that implement the OAI interfaces.
+
+When a LDPC decoding (Uplink) or a LDPC encoding (Downlink) function call happens in the OAI stack (DU High-PHY layer) the doca_comch client (host side) will be called to offload the LDPC function on DPU (server) and the function will be run on Arm multicore CPUs properly.
+
 
 ## ArmRAL
 
@@ -200,9 +219,11 @@ This project uses the ArmRAL Low-Density Parity Check (LDPC) decoding and encodi
 
 Download ArmRAL from [ArmRAL GitLab](https://gitlab.arm.com/networking/ral) or from [ArmRAL Releases](https://gitlab.arm.com/networking/ral/-/releases).
 
+
 ### Installation Instructions
 
 The tutorial to build and install the Arm RAN Acceleration Library (ArmRAL) can be found in the [Get started with Arm RAN Acceleration Library](https://developer.arm.com/documentation/102249/2504/Tutorials/Get-started-with-Arm-RAN-Acceleration-Library?lang=en).
+
 
 ### DPU-ArmRAL Integration
 
@@ -210,7 +231,8 @@ Content here...
 
 ## OpenAirInterface (OAI)
 
-OpenAirInterface (OAI) is an open-source software platform that provides a complete, software-based implementation of 4G (LTE) and 5G (NR) cellular network standards. It essentially allows to run a full mobile network—from the core network to the radio access network (e.g., base station and user equipment) on standard computing hardware.
+OpenAirInterface (OAI) is an open-source software platform that provides a complete, software-based implementation of 4G (LTE) and 5G (NR) cellular network standards. It essentially allows to run a full mobile network, from the core network to the radio access network (e.g., base station and user equipment) on standard computing hardware.
+
 
 ### Core Components
 
@@ -222,9 +244,11 @@ OpenAirInterface is divided into two main parts that work together to form a cel
 
 These functional splits are a core concept of Open RAN (O-RAN) because they allow for interoperability between different vendors. OpenAirInterface is a powerful tool for exploring these splits.
 
+
 ### OAI and Fucntional Splits
 
 OAI implements the two most common splits, O-RAN 7.2x and 3GPP split 2.
+
 
 #### O-RAN 7.2x Split
 
@@ -236,6 +260,7 @@ This is the most widely adopted and a defining characteristic of O-RAN. The O-RA
 
 This split is a balance between centralization and fronthaul bandwidth. By keeping some PHY processing in the O-RU, it reduces the amount of data that needs to be sent over the fronthaul (the link between the O-RU and O-DU), making it a more practical choice for a wider range of deployments. The O-RAN Alliance standardized this split to promote vendor interoperability.
 
+
 #### 3GPP Split 2
 
 This is an alternative, higher-level split defined by the 3GPP standards body. In this split, the entire Physical Layer (PHY) resides in the Distributed Unit (DU), while the Centralized Unit (CU) handles the Radio Resource Control (RRC) and Packet Data Convergence Protocol (PDCP) layers. The interface is between the CU and the DU.
@@ -245,6 +270,7 @@ This is an alternative, higher-level split defined by the 3GPP standards body. I
 * DU (Distributed Unit): Handles the entire MAC, Radio Link Control (RLC), and PHY layers.
 
 Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (the DU). However, it places greater demands on the fronthaul network (the link between the DU and the Radio Head), as a large amount of raw baseband data needs to be transmitted. While defined by 3GPP, this split is less commonly used in commercial O-RAN deployments than the 7.2x split due to its stricter transport requirements.
+
 
 ### Installation Instructions
 
