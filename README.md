@@ -6,16 +6,19 @@ The purpose of this research project is to investigate the offloading and hw acc
 - [DOCA SDK](#doca-sdk)
     - [Installation Instructions](#installation-instructions)
     - [doca_comch API](#doca_comch-api)
-    - [DOCA Comch Data Path Client/Server](#doca-comch-data-pat-client-Server)
-    - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-client-server)
-    - [Usage](#usage)
+    - [DOCA Comch Data Path Client/Server](#doca-comch-data-path-client/Server)
+    - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-client/server)
 - [ArmRAL](#armral)
     - [Installation Instructions](#installation-instructions-1)
     - [DPU-ArmRAL Integration](#dpu-armral-integration)
 - [OpenAirInterface (OAI)](#openairinterface-oai)
+    - [Core Components](core-components)
+    - [OAI and Functional Splits](oai-and-functional-splits)
+    - [O-RAN 7.2x Split](o-ran-7.2x-split)
+    - [3GPP Split 2](3gpp-split-2)
     - [Installation Instructions](#installation-instructions-2)
     - [OAI-Host Integration](#oai-host-integration)
-    - [Usage](#usage-1)
+    - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-OAI-5GC,-gNB-and-nrUE)
 - [Experiments](#experiments)
 - [Contributing](#contributing)
 
@@ -27,7 +30,7 @@ The purpose of this research project is to investigate the offloading and hw acc
 * Software
     * DOCA SDK 3.0.0
     * ArmRAL 25.07
-    * OpenAirInterface 
+    * OpenAirInterface 2025.w31
 
 * Arm CPU
     * To use the Cyclic Redundancy Check (CRC) functions, the Gold sequence generator, and the convolutional encoder, the library must run on a core that supports the AArch64 PMULL extension (check in lscpu, /proc/cpuinfo)
@@ -259,6 +262,7 @@ The tutorial to build and install the Arm RAN Acceleration Library (ArmRAL) can 
 
 Content here...
 
+
 ## OpenAirInterface (OAI)
 
 OpenAirInterface (OAI) is an open-source software platform that provides a complete, software-based implementation of 4G (LTE) and 5G (NR) cellular network standards. It essentially allows to run a full mobile network, from the core network to the radio access network (e.g., base station and user equipment) on standard computing hardware.
@@ -310,7 +314,7 @@ OAI installation content.
 
 OAI integration content here...
 
-### Usage
+### Instantiation of OAI 5GC, gNB and nrUE
 
 OAI usage content.
 
