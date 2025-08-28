@@ -323,14 +323,14 @@ aarch64-linux-gnu-g++
 aarch64-linux-gnu-gcc -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.c
 aarch64-linux-gnu-g++ -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.cpp
 ```
-* Building on bare-metal (no OS):
+* Building on bare-metal (no OS), use the cross toolchain:
 ```bash
 aarch64-none-elf-gcc
 aarch64-none-elf-g++
 ```
 * Compiling natively on an AArch64-based machine
 
-Building directly on the Cortex-A78AE CPU (native build, e.g. BlueField DPU), use the native compilers:
+Building directly on the Cortex-A78AE CPU (native build, e.g. BlueField DPU), use native compilers:
 ```bash
 gcc -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.c
 g++ -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.cpp
