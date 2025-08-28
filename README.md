@@ -2,51 +2,102 @@
 The purpose of this research project is to investigate the offloading and hw acceleration of the compute-intensive LDPC function from the O-DU High-PHY layer of the 5G NR in a NVIDIA BlueField-3 DPU, according to O-RAN 7.2x split, to enhance the function performance (throughput, latency and energy efficiency).
 
 ## Table of Contents
+- [Low-Density Parity-Check (LDPC) Codes](#low-density-parity-check-ldpc-codes)
+    - [What LDPC Codes are](#what-ldpc-codes-are)
+    - [How They Work](#how-they-work)
+    - [Applications](#applications)
+    - [Comparison with Other Codes](#comparison-with-other-codes)
+    - [Key 3GPP Specifications for 5G NR](#key-3gpp-specifications-for-5g-nr)
 - [Requirements](#requirements)
 - [DOCA SDK](#doca-sdk)
-    - [Installation Instructions](#installation-instructions)
-    - [Project Structure](#project-structure)
-          - [Host build commands](#host-build-commands)
-          - [DPU build commands](#dpu-build-commands)
-    - [doca_comch API](#doca_comch-api)
-    - [DOCA Comch Data Path Client/Server](#doca-comch-data-path-clientserver)
-    - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-clientserver)
+  - [Installation Instructions](#installation-instructions)
+  - [Project Structure](#project-structure)
+  - [Compilation of the Clients and Servers](#compilation-of-the-clients-and-servers)
+- [doca_comch API](#doca_comch-api)
+  - [DOCA Comch Data Path Client/Server](#doca-comch-data-path-clientserver)
+  - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-clientserver)
 - [ArmRAL](#armral)
-    - [Installation Instructions](#installation-instructions-1)
-    - [Compilation and Buiding the ArmRAL shared library](#compilation-and-building-the-ArmRAL-shared-library)
-    - [Installation of the ArmRAL](#installation-of-the-ArmRAL)
-    - [DPU-ArmRAL Integration](#dpu-armral-integration)
-- [NVIDIA BlueField-3 DPU](#nvidia-bluefield3-dpu)
+  - [Installation Instructions](#installation-instructions-1)
+  - [Compilation and Building the ArmRAL shared library](#compilation-and-building-the-armral-shared-library)
+  - [Installation of the ArmRAL](#installation-of-the-armral)
+  - [DPU-ArmRAL Integration](#dpu-armral-integration)
+- [NVIDIA BlueField-3 DPU](#nvidia-bluefield-3-dpu)
 - [OpenAirInterface (OAI)](#openairinterface-oai)
-    - [Core Components](#core-components)
-    - [OAI and Functional Splits](#oai-and-functional-splits)
-    - [O-RAN 7.2x Split](#o-ran-72x-split)
-    - [3GPP Split 2](#3gpp-split-2)
-    - [Installation Instructions](#installation-instructions-2)
-    - [OAI-Host Integration](#oai-host-integration)
-    - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-OAI-5GC-gNB-and-nrUE)
+  - [Core Components](#core-components)
+  - [OAI and Functional Splits](#oai-and-functional-splits)
+  - [O-RAN 7.2x Split](#o-ran-72x-split)
+  - [3GPP Split 2](#3gpp-split-2)
+  - [Installation Instructions](#installation-instructions-2)
+  - [OAI-Host Integration](#oai-host-integration)
+  - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-oai-5gc-gnb-and-nrue)
 - [Acceleration](#acceleration)
 - [Experiments](#experiments)
 - [Contributing](#contributing)
 
+---
+## Low-Density Parity-Check (LDPC) Codes
+In 5G, LDPC codes were chosen as the channel coding scheme for the data channels (like the Physical Downlink Shared Channel (PDSCH) and Physical Uplink Shared Channel (PUSCH)). The 4G LTE uses the Turbo codes.
+
+The details of the LDPC codes, including the specific Base Graphs (BG1 and BG2), parity-check matrices, and encoding and decoding procedures, are defined in 3GPP TS 38.212. This standard provides the precise mathematical framework and algorithms that all 5G devices and network equipment must implement to ensure interoperability and reliable data transmission.
+
+## What LDPC Codes are
+Low-Density Parity-Check (LDPC) codes are a class of highly efficient linear block codes used for error correction. They are used in digital communication systems to transmit data reliably over noisy channels. Unlike simpler error-correcting codes, LDPC codes are designed to be extremely powerful, approaching the theoretical maximum limit for data transmission, as defined by the Shannon-Hartley theorem.
+
+The "low-density" part of the name refers to the sparse structure of their parity-check matrix. This matrix is used to encode and decode the data, and in an LDPC code, it contains a very small number of ones compared to zeros. This sparsity is the key to their efficiency, allowing for high-performance decoding algorithms that can be implemented in a practical manner.
+
+## How They Work
+At a high level, LDPC codes work by adding a certain amount of redundant information, or parity bits, to the original data stream. This creates a longer codeword that contains the original data and the added bits.
+
+* *Encoding:* The sender takes the original data bits and, using the parity-check matrix, generates a set of parity bits. The combination of the original data and the new parity bits forms the encoded codeword.
+
+* *Transmission:* This codeword is then transmitted over a communication channel, such as Wi-Fi or a satellite link. During transmission, noise and interference can corrupt some of the bits, causing them to flip from a 0 to a 1 or vice-versa.
+
+* *Decoding:* The receiver gets the potentially corrupted codeword. The sparse parity-check matrix allows for an iterative decoding process, often visualized on a Tanner graph. The decoder uses this graph to check the consistency of the received bits. By repeatedly checking and correcting bits that violate the parity checks, the decoder can, with high probability, reconstruct the original, uncorrupted data.
+
+## Applications
+Because of their excellent performance, LDPC codes have become the standard for modern high-speed communication systems. They are a core component in:
+
+* 5G and Wi-Fi: They are the primary forward error correction (FEC) codes for data channels, ensuring fast and reliable data transfer.
+
+* Satellite Communication: They are used in satellite systems to combat the long-distance signal degradation and noise.
+
+* Digital Video Broadcasting (DVB): They ensure the integrity of broadcast signals for digital television.
+
+## Comparison with Other Codes
+LDPC codes are often compared to Turbo Codes, another class of high-performance error-correcting codes. While both are powerful, LDPC codes generally have superior performance at very high data rates and are often easier to implement in hardware. This has led to LDPC codes being the preferred choice for many recent communication standards.
+
+### Key 3GPP Specifications for 5G NR
+The 3GPP has a series of Technical Specifications (TS) that define every aspect of the 5G standard. For the physical layer, the most relevant documents are:
+
+* *TS 38.201:* This is the "General description" for the physical layer. It provides an overview of the key features, physical channels, and signals.
+
+* *TS 38.212:* This is the most crucial document for your specific question. It is titled "Multiplexing and channel coding" and it defines the channel coding schemes for the 5G physical layer. This is where you'll find the detailed specifications for LDPC coding for data channels and Polar coding for control channels.
+
+* *TS 38.211:* This specification covers "Physical channels and modulation," detailing the physical layer signals, modulation mapping (like QPSK, 16QAM, 64QAM), and the frame structure.
+
+* *TS 38.213:* This document focuses on "Physical layer procedures" and specifies how the UE (User Equipment) and the network interact, covering things like power control, synchronization, and random access.
+
+*  *TS 38.214:* This standard ...
+
+---
 ## Requirements
-* Hardware
+* **Hardware**
     * Host Intel XEON Gold 6526Y x86_64 with 64 cores
     * NVIDIA BlueField-3 DPU - Arm Cortex-A78AE aarch64 16 cores 
 
-* Software
+* **Software**
     * DOCA SDK 3.0.0
     * ArmRAL 25.07
     * OpenAirInterface 2025.w31
 
-* Arm CPU
+* **ArmRAL**
     * To use the Cyclic Redundancy Check (CRC) functions, the Gold sequence generator, and the convolutional encoder, the library must run on a core that supports the AArch64 PMULL extension (check in lscpu, /proc/cpuinfo)
 
-* Operating System
+* **Linux Ubuntu**
     * OAI
         * Linux Low-latency Kernel
 
-
+---
 ## DOCA SDK
 
 This project makes usage of the NVIDIA DOCA™ Framework, which has compound by DOCA SDK to create and deliver applications and services on top of the BlueField networking platform. The project uses the harnessing the power of NVIDIA's BlueField-3 DPU (Data Processing Unit) to offload and accelerate a 5G NR High-PHY layer function. A DOCA SDK Overview is in [DOCA Overview](https://docs.nvidia.com/doca/sdk/doca+overview/index.html).
@@ -62,8 +113,8 @@ Installation instructions for both host and BlueField image can be found in the 
 
 DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA components is found under the /opt/mellanox/doca directory. These include the traditional SDK-related components (libraries, header files, etc.) as well as the DOCA samples, applications and tools.
 
-
-## Project Structure
+---
+### Project Structure
 
 ```
 ├── client/
@@ -126,11 +177,11 @@ DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA comp
 └── README.md
 ```
 
-#### Compilation of the Clients and Servers
+### Compilation of the Clients and Servers
 
 To compile and build the doca_comch API:
 
-* Host build commands
+* **Host build commands**
 
 ```bash
 cd /opt/mellanox/doca/services/doca_comch
@@ -140,7 +191,7 @@ ninja -C /tmp/build
 
 The generated clients are located under the /tmp/build/ directory.
 
-* DPU build commands  
+* **DPU build commands**  
 ```bash
 # For LDPC Decoder Server
 cd /opt/mellanox/doca/services/doca_comch/nrLDPC_decod_server
@@ -214,7 +265,7 @@ Basically, the logic includes:
 8. Stops and destroys client/server objects.
 
 
-### Running the DOCA Comch Data Path Client/Server
+#### Running the DOCA Comch Data Path Client/Server
 
 First start running the server on DPU side:
 
@@ -238,6 +289,7 @@ The nrUE (nr-uesoftmodem) shall be started with the flag '--loader.ldpc.shlibver
 
 When a 5G OAI DU High-PHY layer needs to perform LDPC decoding (for the uplink) or encoding (for the downlink), it calls a function in the shared library libldpc_armral.so. This library, loaded by the OAI Loader, then offloads the LDPC task from the host CPU to a DPU server. The DOCA Comch client on the host communicates through a established PCIe communication channel with the DOCA Comch server on the DPU to handle this offload. Once offloaded, the ArmRAL LDPC kernel runs efficiently on the DPU's Arm multicore CPUs.
 
+---
 ## ArmRAL
 
 ArmRAL is an open-source software library that provides building blocks (functions or kernels) required by RAN L1 that run on CPU for optimized signal processing and related maths functions for enabling 5G Radio Access Network (RAN) deployments. It leverages the efficient vector units available on Arm cores that support the Armv8-a architectures (Neon, SVE, SVE2 …) and SIMD/Vector capabilities, offering an API that can be integrate into L1 stack to accelerate 5G NR signal processing workloads. The functions/kernels include:
@@ -259,7 +311,7 @@ Download ArmRAL from [ArmRAL GitLab](https://gitlab.arm.com/networking/ral) or f
 The tutorial to build and install the Arm RAN Acceleration Library (ArmRAL) can be found in the [Get started with Arm RAN Acceleration Library](https://developer.arm.com/documentation/102249/2504/Tutorials/Get-started-with-Arm-RAN-Acceleration-Library?lang=en).
 
 
-### Compilation and Buiding the ArmRAL shared library
+### Compilation and Building the ArmRAL shared library
 
 The Arm Cortex-A78AE is a 64-bit Armv8.2-A architecture CPU. It is needed a toolchain that can target AArch64 (arm64).
 
@@ -297,7 +349,7 @@ ubuntu@localhost:~/armRAL/buildRAL$ sudo cmake -DCMAKE_INSTALL_PREFIX=/home/vlad
 
 ubuntu@localhost:~/armRAL/ral-armral-24.01/buildRAL$ make
 ```
-*** Installation of the ArmRAL
+### Installation of the ArmRAL
 
 Ensure you have write access for the installation directories:
 
@@ -315,9 +367,9 @@ An install creates an install_manifest.txt file in the library build directory. 
 
 ### DPU-ArmRAL Integration
 
-Content here...
+**\[Content on how ArmRAL is integrated with the DPU goes here.\]**
 
-
+---
 ## NVIDIA BlueField-3 DPU
 
 The Arm Cortex-A78AE implements the Armv8.2-A architecture baseline with some optional extensions.
@@ -330,7 +382,7 @@ Cortex-A78AE = NEON (128-bit Advanced SIMD).
 
 To use the Cyclic Redundancy Check (CRC) functions, the library must run on a core that supports the AArch64 PMULL extension (check in DPU with lscpu, /proc/cpuinfo).
 
-
+---
 ## OpenAirInterface (OAI)
 
 OpenAirInterface (OAI) is an open-source software platform that provides a complete, software-based implementation of 4G (LTE) and 5G (NR) cellular network standards. It essentially allows to run a full mobile network, from the core network to the radio access network (e.g., base station and user equipment) on standard computing hardware.
@@ -376,16 +428,17 @@ Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (
 
 ### Installation Instructions
 
-OAI installation content.
+**\[Content on OAI installation goes here.\]**
 
 ### OAI-Host Integration
 
-OAI integration content here...
+**\[Content on OAI integration with the host goes here.\]**
 
 ### Instantiation of OAI 5GC, gNB and nrUE
 
-OAI usage content.
+**\[Content on how to run OAI 5GC, gNB, and nrUE goes here.\]**
 
+---
 ## Acceleration
 * DPU Hardware
   * RoCE/IB
@@ -395,17 +448,19 @@ OAI usage content.
   * Arm NEON CPU intrinsics
     * architecture
     * Instructions set
+    * Cache alignment
     * SIMD
     * Vector programming
 * Producer / Consumer model - Producers generate tasks (data or events), and Consumers process the tasks (data or events)
 * Software parallelized with Pthreads (POSIX Threads) lib - multithreading programming
 * Thread Pool to handle task queue
 
-
+---
 ## Experiments
 
-Content here...
+**\[Content on experiments goes here.\]**
 
+---
 ## Contributing
 
-Contribution guidelines.
+**\[Content on contribution guidelines goes here.\]**
