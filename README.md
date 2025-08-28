@@ -13,7 +13,10 @@ The purpose of this research project is to investigate the offloading and hw acc
     - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-clientserver)
 - [ArmRAL](#armral)
     - [Installation Instructions](#installation-instructions-1)
+    - [Compilation and Buiding the ArmRAL shared library](#compilation-and-building-the-ArmRAL-shared-library)
+    - [Installation of the ArmRAL](#installation-of-the-ArmRAL)
     - [DPU-ArmRAL Integration](#dpu-armral-integration)
+- [NVIDIA BlueField-3 DPU](#nvidia-bluefield3-dpu)
 - [OpenAirInterface (OAI)](#openairinterface-oai)
     - [Core Components](#core-components)
     - [OAI and Functional Splits](#oai-and-functional-splits)
@@ -123,11 +126,11 @@ DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA comp
 └── README.md
 ```
 
-#### Compilation
+#### Compilation of the Clients and Servers
 
 To compile and build the doca_comch API:
 
-##### Host build commands
+* Host build commands
 
 ```bash
 cd /opt/mellanox/doca/services/doca_comch
@@ -135,10 +138,9 @@ meson /tmp/build
 ninja -C /tmp/build
 ```
 
-##### DPU build commands
+The generated clients are located under the /tmp/build/ directory.
 
-* doca_comch servers
-    
+* DPU build commands  
 ```bash
 # For LDPC Decoder Server
 cd /opt/mellanox/doca/services/doca_comch/nrLDPC_decod_server
@@ -153,10 +155,8 @@ ninja -C /tmp/build
 
 The generated servers are located under the /tmp/build/ directory.
 
-* doca_comch clients
-
 ```bash
-# host
+# host (client)
 cd /tmp/build
 ls -la
     compile_commands.json
@@ -172,15 +172,13 @@ ls -la
     .ninja_deps
     .ninja_log
 
-# DPU
+# DPU (server)
 cd /tmp/build
 ls -la
 
 
 
 ```
-
-The generated clients are located under the /tmp/build/ directory.
 
 The library libldpc_armral.so (host side) will be built again when the OAI 5G NR executables are generated.
 
@@ -261,9 +259,76 @@ Download ArmRAL from [ArmRAL GitLab](https://gitlab.arm.com/networking/ral) or f
 The tutorial to build and install the Arm RAN Acceleration Library (ArmRAL) can be found in the [Get started with Arm RAN Acceleration Library](https://developer.arm.com/documentation/102249/2504/Tutorials/Get-started-with-Arm-RAN-Acceleration-Library?lang=en).
 
 
+### Compilation and Buiding the ArmRAL shared library
+
+The Arm Cortex-A78AE is a 64-bit Armv8.2-A architecture CPU. It is needed a toolchain that can target AArch64 (arm64).
+
+* Compiling on an x86 host for an A78AE target running on Ubuntu, and also for Hipervisor QEMU, use the cross toolchain:
+```bash
+aarch64-linux-gnu-gcc
+aarch64-linux-gnu-g++
+
+aarch64-linux-gnu-gcc -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.c
+aarch64-linux-gnu-g++ -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.cpp
+```
+* Building on bare-metal (no OS):
+```bash
+aarch64-none-elf-gcc
+aarch64-none-elf-g++
+```
+* Compiling natively on an AArch64-based machine
+
+Building directly on the Cortex-A78AE CPU (native build, e.g. BlueField DPU), use the native compilers:
+```bash
+gcc -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.c
+g++ -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.cpp
+```
+* Building the shared library
+
+Download the last [ArmRAL Release](https://gitlab.arm.com/networking/ral/-/releases).
+```bash
+ubuntu@localhost:~/armRAL$ wget https://gitlab.arm.com/networking/ral/-/archive/armral-25.04/ral-armral-25.04.tar
+
+ubuntu@localhost:~/armRAL$ tar -xvf ral-armral-24.01.tar
+
+ubuntu@localhost:~/armRAL$ mkdir buildRAL
+ubuntu@localhost:~/armRAL$ cd buildRAL
+ubuntu@localhost:~/armRAL/buildRAL$ sudo cmake -DCMAKE_INSTALL_PREFIX=/home/vlademir/armRAL/ral-armral-25.04/buildRAL -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_C_FLAGS="-march=armv8.2-a -mcpu=cortex-a78 -O2" -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-march=armv8.2-a -mcpu=cortex-a78 -O2" -DBUILD_TESTING=On -DARMRAL_TEST_RUNNER=bf-3-aarch64 -DBUILD_EXAMPLES=On -DBUILD_SHARED_LIBS=On -DARMRAL_ARCH=NEON -DBUILD_SIMULATION=On
+
+ubuntu@localhost:~/armRAL/ral-armral-24.01/buildRAL$ make
+```
+*** Installation of the ArmRAL
+
+Ensure you have write access for the installation directories:
+
+* For a default installation, you must have write access for /usr/local/lib/, for the library, and /usr/local/include/, for the header files.
+* For a custom installation, you must have write access for <install-dir>/lib/, for the library, and <install-dir>/include/, for the header files.
+
+* Installation of the library
+```bash
+make install
+```
+The shared library 'libarmral.so' will be under <install-dir>/lib/
+
+An install creates an install_manifest.txt file in the library build directory. install_manifest.txt lists the installation locations for the library and the header files.
+
+
 ### DPU-ArmRAL Integration
 
 Content here...
+
+
+## NVIDIA BlueField-3 DPU
+
+The Arm Cortex-A78AE implements the Armv8.2-A architecture baseline with some optional extensions.
+
+Cortex-A78AE includes NEON (Advanced SIMD) as part of the Armv8-A baseline.
+
+NEON is 128-bit wide and is the standard SIMD unit for most Arm cores up through v8.x.
+
+Cortex-A78AE = NEON (128-bit Advanced SIMD).
+
+To use the Cyclic Redundancy Check (CRC) functions, the library must run on a core that supports the AArch64 PMULL extension (check in DPU with lscpu, /proc/cpuinfo).
 
 
 ## OpenAirInterface (OAI)
@@ -300,7 +365,7 @@ This split is a balance between centralization and fronthaul bandwidth. By keepi
 
 #### 3GPP Split 2
 
-This is an alternative, higher-level split defined by the 3GPP standards body. In this split, the entire Physical Layer (PHY) resides in the Distributed Unit (DU), while the Centralized Unit (CU) handles the Radio Resource Control (RRC) and Packet Data Convergence Protocol (PDCP) layers. The interface is between the CU and the DU.
+This is the higher-level split defined by the 3GPP standards body. In this split, the entire Physical Layer (PHY) resides in the Distributed Unit (DU), while the Centralized Unit (CU) handles the Radio Resource Control (RRC) and Packet Data Convergence Protocol (PDCP) layers. The interface is between the CU and the DU.
 
 * CU (Centralized Unit): Handles higher-level functions, including RRC and PDCP, which are less time-sensitive.
 
