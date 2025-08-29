@@ -323,11 +323,6 @@ aarch64-linux-gnu-g++
 aarch64-linux-gnu-gcc -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.c
 aarch64-linux-gnu-g++ -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.cpp
 ```
-* Building on bare-metal (no OS), use the cross toolchain:
-```bash
-aarch64-none-elf-gcc
-aarch64-none-elf-g++
-```
 * Compiling natively on an AArch64-based machine
 
 Building directly on the Cortex-A78AE CPU (native build, e.g. BlueField DPU), use native compilers:
@@ -337,17 +332,44 @@ g++ -march=armv8.2-a -mcpu=cortex-a78 -O2 -o myprog myprog.cpp
 ```
 * Building the shared library
 
-Download the last [ArmRAL Release](https://gitlab.arm.com/networking/ral/-/releases).
+Download the last ArmRAL release
 ```bash
-ubuntu@localhost:~/armRAL$ wget https://gitlab.arm.com/networking/ral/-/archive/armral-25.04/ral-armral-25.04.tar
+# host login
+username@intrig:~$ mkdir armral
+username@intrig:~/armral$ wget https://gitlab.arm.com/networking/ral/-/archive/armral-25.07/ral-armral-25.07.tar
+```
+Copy the tar file to DPU
+```bash
+# DPU login
+username@localhost:~$ mkdir armral
+username@localhost:~/armral$ scp vlademir@10.1.1.169:/home/vlademir/armral/ral-armral-25.07.tar .
 
-ubuntu@localhost:~/armRAL$ tar -xvf ral-armral-24.01.tar
+username@localhost:~/armral$ tar -xvf ral-armral-25.07.tar
+```
+Tools
+Ensure the installation of gcc, g++ and cmake (x86_64) on host
+Ensure the installation of gcc, g++ and cmake (arm64) on DPU
 
-ubuntu@localhost:~/armRAL$ mkdir buildRAL
-ubuntu@localhost:~/armRAL$ cd buildRAL
-ubuntu@localhost:~/armRAL/buildRAL$ sudo cmake -DCMAKE_INSTALL_PREFIX=/home/vlademir/armRAL/ral-armral-25.04/buildRAL -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_C_FLAGS="-march=armv8.2-a -mcpu=cortex-a78 -O2" -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-march=armv8.2-a -mcpu=cortex-a78 -O2" -DBUILD_TESTING=On -DARMRAL_TEST_RUNNER=bf-3-aarch64 -DBUILD_EXAMPLES=On -DBUILD_SHARED_LIBS=On -DARMRAL_ARCH=NEON -DBUILD_SIMULATION=On
+Build the ArmRAL lib
 
-ubuntu@localhost:~/armRAL/ral-armral-24.01/buildRAL$ make
+Explicitly enable NEON/SIMD intrinsics, even though Cortex-A78AE supports it. For gcc and g++ on AArch64, NEON intrinsics requires:
+
+* +simd - enables NEON instructions
+* +crypto - optional, enables ARMv8 crypto instructions (for BlueField-3 / A78AE)
+* -mcpu=cortex-a78 - optimizes for the specific CP
+* -O2 or -O3 - optimization level
+
+Use NEON/SIMD explicitly with these flags:
+
+-DCMAKE_C_FLAGS="-O2 -march=armv8.2-a+simd+crypto -mcpu=cortex-a78"
+-DCMAKE_CXX_FLAGS="-O2 -march=armv8.2-a+simd+crypto -mcpu=cortex-a78"
+```bash
+username@localhost:~/armral$ mkdir build
+username@localhost:~/armral$ cd build
+
+username@localhost:~/armral/build$ sudo cmake -DCMAKE_INSTALL_PREFIX=/home/vlademir/armral/ral-armral-25.07/build /home/vlademir/armral/ral-armral-25.07/ -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_C_FLAGS="-O2 -march=armv8.2-a+simd+crypto -mcpu=cortex-a78" -DCMAKE_CXX_FLAGS="-O2 -march=armv8.2-a+simd+crypto -mcpu=cortex-a78" -DBUILD_TESTING=On -DARMRAL_TEST_RUNNER=bf-3-aarch64 -DBUILD_EXAMPLES=On -DBUILD_SHARED_LIBS=On -DARMRAL_ARCH=NEON -DBUILD_SIMULATION=On
+
+username@localhost:~/armral/ral-armral-25.07/build$ sudo make
 ```
 ### Installation of the ArmRAL
 
