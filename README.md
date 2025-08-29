@@ -22,6 +22,7 @@ The purpose of this research project is to investigate the offloading and hw acc
   - [Installation of the ArmRAL](#installation-of-the-armral)
   - [DPU-ArmRAL Integration](#dpu-armral-integration)
 - [NVIDIA BlueField-3 DPU](#nvidia-bluefield-3-dpu)
+    - [Technical Specification](#technical-specification)
 - [OpenAirInterface (OAI)](#openairinterface-oai)
   - [Core Components](#core-components)
   - [OAI and Functional Splits](#oai-and-functional-splits)
@@ -31,6 +32,8 @@ The purpose of this research project is to investigate the offloading and hw acc
   - [OAI-Host Integration](#oai-host-integration)
   - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-oai-5gc-gnb-and-nrue)
 - [Acceleration Aspects](#acceleration-aspects)
+    - [Arm Cortex-A78](#arm-cortex-a78)
+    - [ArmRAL Characteristics](#armral-characteristics)
     - [Compiler Optimization Level](#compiler-optimization-level)
 - [Experiments](#experiments)
 - [Contributing](#contributing)
@@ -396,6 +399,8 @@ An install creates an install_manifest.txt file in the library build directory. 
 ---
 ## NVIDIA BlueField-3 DPU
 
+### Technical Specification
+
 The Arm Cortex-A78AE implements the Armv8.2-A architecture baseline with some optional extensions.
 
 Cortex-A78AE includes NEON (Advanced SIMD) as part of the Armv8-A baseline.
@@ -465,6 +470,49 @@ Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (
 ---
 ## Acceleration Aspects
 
+### Arm Cortex-A78
+* Arm NEON CPU intrinsics
+  * NEON intrinsics - functions mapping to SIMD instructions
+  * Architecture, instruction set, SIMD - define what intrinsics are available
+* Cache alignment, vector programming - techniques to use intrinsics effectively
+
+Some common causes:
+
+Aggressive optimizations
+
+For example, loop unrolling duplicates the loop body several times to reduce branch overhead, but too much unrolling creates many copies of the same instructions → code gets much bigger.
+
+Inlining
+
+The compiler replaces a function call with the full function body (to avoid call overhead).
+
+If the function is used many times, this can lead to large amounts of repeated code.
+
+Templates in C++
+
+Each instantiation of a template with a different type produces a new version of the code → large binaries if templates are overused.
+
+Autovectorization and Intrinsics
+
+Sometimes compilers emit long sequences of SIMD instructions (or multiple fallback code paths for different CPUs), inflating binary size.
+
+👉 In short:
+
+Pros: Code bloat sometimes improves speed (fewer branches, more inlined code, better pipelining).
+
+Cons: Larger binaries, worse instruction cache locality, potential slowdown if I-cache misses dominate.
+
+For LDPC decoding/encoding (compute-heavy, tight loops):
+
+A bit of loop unrolling and SIMD inlining is good.
+
+But excessive unrolling/inlining → code bloat may hurt performance, especially on embedded CPUs like Cortex-A78 with smaller caches.
+
+
+### ArmRAL Characteristics
+
+**\[Content on encoding/decoding such as algorithm implemented, Base Graph, quasi-cyclic (QC) parity-check matrix, etc go here.\]**
+
 ### Compiler Optimization Level
 
 '-O2' (default recommended for release builds)
@@ -474,14 +522,14 @@ Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (
 * Very widely used for production builds because it balances speed and stability
 
 '-O3' (aggressive optimizations)
-* Enables everything from -O2 plus more aggressive optimizations, such as
+* Enables everything from '-O2' plus more aggressive optimizations, such as
   * Function inlining (even across more boundaries)
   * Loop unrolling - a compiler optimization technique where a loop’s iterations are expanded (“unrolled”) into multiple copies of the loop body to reduce loop overhead and     improve performance
   * Vectorization heuristics (trying to use SIMD more)
   * More speculative optimizations
 * Can make code faster, but
   * May also increase binary size
-  * Sometimes slows down performance due to cache misses (code bloat)
+  * Sometimes slows down performance due to cache misses (code bloat) - code bloat happens when the size of a compiled program becomes much larger than necessary, usually       because of excessive or redundant code generation. This can negatively impact instruction cache usage, memory footprint, and sometimes performance
   * In rare cases can expose compiler bugs or undefined behavior in code
 
 '-Ofast'
@@ -518,12 +566,6 @@ Notes
   * 200 Gbps (InfiniBand)
   * dmma (shared memory)
   * zero copy
-  * Arm NEON CPU intrinsics
-    * architecture
-    * Instructions set
-    * Cache alignment
-    * SIMD
-    * Vector programming
 * Producer / Consumer model - Producers generate tasks (data or events), and Consumers process the tasks (data or events)
 * Software parallelized with Pthreads (POSIX Threads) lib - multithreading programming
 * Thread Pool to handle task queue
