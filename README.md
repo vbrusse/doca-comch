@@ -490,11 +490,11 @@ Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (
 * Best for maximum performance if you don’t care about IEEE/ISO compliance
 
 Recommendation
-* Start with -O3
+* Option '-O3'
   * Enables aggressive loop unrolling, vectorization, and inlining
-  * LDPC encoding/decoding involves lots of loops, matrix operations, and bit manipulations, so -O3 often gives a significant speedup over -O2
+  * LDPC encoding/decoding involves lots of loops, matrix operations, and bit manipulations, so '-O3' often gives a significant speedup over '-O2'
   * Modern ARM CPUs like Cortex-A78AE benefit from aggressive instruction scheduling and NEON vectorization
-* Optionally try -Ofast
+* Option '-Ofast'
   * If the code doesn’t rely on strict IEEE floating-point behavior (less relevant for LDPC, mostly integer/bit operations)
   * If the focus is to squeeze maximum performance
 * Keep -march=armv8.2-a+simd+crypto -mcpu=cortex-a78 alongside it
@@ -502,11 +502,11 @@ Recommendation
   * The compiler can auto-vectorize loops in addition to your NEON intrinsics
 
 Practical approach
-* Compile LDPC function with -O2 first as a baseline
+* Compile LDPC function with '-O2' first as a baseline
 * Benchmark throughput (bits/sec or code blocks/sec)
-* Recompile with -O3, benchmark again
-* If safe, try -Ofast and compare
-Often, -O3 gives 20–50% speedup over -O2 for compute-heavy loops. -Ofast may give a few more percent, but can risk subtle differences.
+* Recompile with '-O3', benchmark again
+* If safe, try '-Ofast' and compare
+Often, '-O3' gives 20–50% speedup over '-O2' for compute-heavy loops. '-Ofast' may give a few more percent, but can risk subtle differences.
 
 Notes
 * Always enable NEON explicitly (+simd) to ensure intrinsics like vmull_p64 work correctly.
