@@ -30,7 +30,8 @@ The purpose of this research project is to investigate the offloading and hw acc
   - [Installation Instructions](#installation-instructions-2)
   - [OAI-Host Integration](#oai-host-integration)
   - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-oai-5gc-gnb-and-nrue)
-- [Acceleration](#acceleration)
+- [Acceleration Aspects](#acceleration-aspects)
+    - [Compiler Optimization Level](#compiler-optimization-level)
 - [Experiments](#experiments)
 - [Contributing](#contributing)
 
@@ -354,15 +355,16 @@ Build the ArmRAL lib
 
 Explicitly enable NEON/SIMD intrinsics, even though Cortex-A78AE supports it. For gcc and g++ on AArch64, NEON intrinsics requires:
 
-* +simd - enables NEON instructions
+* +simd - always enable NEON explicitly (+simd) to ensure intrinsics like vmull_p64 work correctly
 * +crypto - optional, enables ARMv8 crypto instructions (for BlueField-3 / A78AE)
-* -mcpu=cortex-a78 - optimizes for the specific CP
-* -O2 or -O3 - optimization level
+* -mcpu=cortex-a78 - optimizes for the specific CPU
+* -O2, -O3 or -Ofast - optimization level
 
 Use NEON/SIMD explicitly with these flags:
 
 -DCMAKE_C_FLAGS="-O2 -march=armv8.2-a+simd+crypto -mcpu=cortex-a78" \
 -DCMAKE_CXX_FLAGS="-O2 -march=armv8.2-a+simd+crypto -mcpu=cortex-a78"
+
 ```bash
 username@localhost:~/armral$ mkdir build
 username@localhost:~/armral$ cd build
@@ -461,7 +463,56 @@ Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (
 **\[Content on how to run OAI 5GC, gNB, and nrUE goes here.\]**
 
 ---
-## Acceleration
+## Acceleration Aspects
+
+### Compiler Optimization Level
+
+'-O2' (default recommended for release builds)
+* Enables nearly all optimizations that do not involve space–speed tradeoffs
+* Includes loop optimizations, instruction scheduling, vectorization (SIMD), etc.
+* Keeps compilation time reasonable
+* Very widely used for production builds because it balances speed and stability
+
+'-O3' (aggressive optimizations)
+* Enables everything from -O2 plus more aggressive optimizations, such as
+  * Function inlining (even across more boundaries)
+  * Loop unrolling
+  * Vectorization heuristics (trying to use SIMD more)
+  * More speculative optimizations
+* Can make code faster, but
+  * May also increase binary size
+  * Sometimes slows down performance due to cache misses (code bloat)
+  * In rare cases can expose compiler bugs or undefined behavior in code
+
+'-Ofast'
+* Includes -O3 plus optimizations that may break strict standards compliance (e.g., assumes math operations are associative, ignores corner cases like NaN handling).
+  NaN (Not a Number) is a special value in floating-point arithmetic (with types like float or double) that represents an undefined or unrepresentable result
+* Best for maximum performance if you don’t care about IEEE/ISO compliance
+
+Recommendation
+* Start with -O3
+  * Enables aggressive loop unrolling, vectorization, and inlining
+  * LDPC encoding/decoding involves lots of loops, matrix operations, and bit manipulations, so -O3 often gives a significant speedup over -O2
+  * Modern ARM CPUs like Cortex-A78AE benefit from aggressive instruction scheduling and NEON vectorization
+* Optionally try -Ofast
+  * If the code doesn’t rely on strict IEEE floating-point behavior (less relevant for LDPC, mostly integer/bit operations)
+  * If the focus is to squeeze maximum performance
+* Keep -march=armv8.2-a+simd+crypto -mcpu=cortex-a78 alongside it
+  * This enables NEON intrinsics, which your LDPC function likely uses
+  * The compiler can auto-vectorize loops in addition to your NEON intrinsics
+
+Practical approach
+* Compile LDPC function with -O2 first as a baseline
+* Benchmark throughput (bits/sec or code blocks/sec)
+* Recompile with -O3, benchmark again
+* If safe, try -Ofast and compare
+Often, -O3 gives 20–50% speedup over -O2 for compute-heavy loops. -Ofast may give a few more percent, but can risk subtle differences.
+
+Notes
+* Always enable NEON explicitly (+simd) to ensure intrinsics like vmull_p64 work correctly.
+* Make sure the LDPC function is aligned and uses vector-friendly memory layouts; otherwise, -O3 optimizations can’t fully help.
+* Profile with perf or gprof to see which loops benefit most.
+---
 * DPU Hardware
   * RoCE/IB
   * 200 Gbps (InfiniBand)
@@ -480,7 +531,7 @@ Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (
 ---
 ## Experiments
 
-**\[Content on experiments goes here.\]**
+**\[Content on experiments and use cases go here.\]**
 
 ---
 ## Contributing
