@@ -361,7 +361,7 @@ Explicitly enable NEON/SIMD intrinsics, even though Cortex-A78AE supports it. Fo
 
 Use NEON/SIMD explicitly with these flags:
 
--DCMAKE_C_FLAGS="-O2 -march=armv8.2-a+simd+crypto -mcpu=cortex-a78"
+-DCMAKE_C_FLAGS="-O2 -march=armv8.2-a+simd+crypto -mcpu=cortex-a78" \
 -DCMAKE_CXX_FLAGS="-O2 -march=armv8.2-a+simd+crypto -mcpu=cortex-a78"
 ```bash
 username@localhost:~/armral$ mkdir build
