@@ -476,7 +476,7 @@ Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (
 '-O3' (aggressive optimizations)
 * Enables everything from -O2 plus more aggressive optimizations, such as
   * Function inlining (even across more boundaries)
-  * Loop unrolling
+  * Loop unrolling - a compiler optimization technique where a loop’s iterations are expanded (“unrolled”) into multiple copies of the loop body to reduce loop overhead and     improve performance
   * Vectorization heuristics (trying to use SIMD more)
   * More speculative optimizations
 * Can make code faster, but
