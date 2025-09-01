@@ -476,6 +476,8 @@ Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (
   * Architecture, instruction set, SIMD - define what intrinsics are available
 * Cache alignment, vector programming - techniques to use intrinsics effectively
 
+Code bloat happens when the size of a compiled program becomes much larger than necessary, usually because of excessive or redundant code generation. This can negatively impact instruction cache usage, memory footprint, and sometimes performance.
+
 Some common causes:
 
 Aggressive optimizations
@@ -506,7 +508,7 @@ For LDPC decoding/encoding (compute-heavy, tight loops):
 
 A bit of loop unrolling and SIMD inlining is good.
 
-But excessive unrolling/inlining → code bloat may hurt performance, especially on embedded CPUs like Cortex-A78 with smaller caches.
+But excessive unrolling/inlining - code bloat may hurt performance, especially on embedded CPUs like Cortex-A78 with smaller caches.
 
 
 ### ArmRAL Characteristics
@@ -566,9 +568,10 @@ Notes
   * 200 Gbps (InfiniBand)
   * dmma (shared memory)
   * zero copy
-* Producer / Consumer model - Producers generate tasks (data or events), and Consumers process the tasks (data or events)
-* Software parallelized with Pthreads (POSIX Threads) lib - multithreading programming
-* Thread Pool to handle task queue
+* High Performance Computing (HPC)
+  * Producer / Consumer model (DOCA comch API) - Producers generate tasks (data or events), and Consumers process the tasks (data or events)
+  * Software parallelized with Pthreads (POSIX Threads) lib - multithreading programming
+  * Thread Pool to handle task queue
 
 ---
 ## Experiments
@@ -579,3 +582,9 @@ Notes
 ## Contributing
 
 **\[Content on contribution guidelines goes here.\]**
+
+
+BLER (Block Error Rate) per Watt
+3GPP TS 36.213 - Physical Layer Procedures
+3GPP TS 36.321 - MAC Layer Specifications
+3GPP TS 36.331 - RRC Protocol Specification
