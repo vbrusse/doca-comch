@@ -27,8 +27,10 @@ The purpose of this research project is to investigate the offloading and hw acc
   - [Core Components](#core-components)
   - [OAI and Functional Splits](#oai-and-functional-splits)
   - [O-RAN 7.2x Split](#o-ran-72x-split)
-  - [3GPP Split 2](#3gpp-split-2)
+      - [3GPP Split 2](#3gpp-split-2)
   - [Installation Instructions](#installation-instructions-2)
+      - [5G CN Prerequisites](#5g-cn-prerequisites)
+      - [5G NR Prerequisites](#5g-nr-prerequisites)
   - [OAI-Host Integration](#oai-host-integration)
   - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-oai-5gc-gnb-and-nrue)
 - [Acceleration Aspects](#acceleration-aspects)
@@ -36,6 +38,7 @@ The purpose of this research project is to investigate the offloading and hw acc
     - [ArmRAL Characteristics](#armral-characteristics)
     - [Compiler Optimization Level](#compiler-optimization-level)
 - [Experiments](#experiments)
+    - [First thing](#first-thing)
 - [Contributing](#contributing)
 
 ---
@@ -86,7 +89,7 @@ The 3GPP has a series of Technical Specifications (TS) that define every aspect 
 ---
 ## Requirements
 * **Hardware**
-    * Host Intel XEON Gold 6526Y x86_64 with 64 cores
+    * Host Intel XEON Gold 6526Y x86_64 64 cores
     * NVIDIA BlueField-3 DPU - Arm Cortex-A78AE aarch64 16 cores 
 
 * **Software**
@@ -457,7 +460,49 @@ Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (
 
 ### Installation Instructions
 
-**\[Content on OAI installation goes here.\]**
+#### 5G CN Prerequisites
+Check the [System Requirements](https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/develop/doc/NR_SA_Tutorial_OAI_CN5G.md) and prerequisites for 5G CN.
+
+#### 5G NR Prerequisites
+Check the [System Requirements](https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/develop/doc/system_requirements.md) for 5G NR.
+
+The host and DPU shall be configured with these [Prerequisites](https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/develop/doc/ORAN_FHI7.2_Tutorial.md)
+
+Supported CPU Architecture
+
+| Architecture/RAM | Architecture/RAM used |
+|---|---|
+| x86_64 (Intel, AMD) AVX2 instruction set | x86_64 (Intel) AVX2, 256GB/251.57GiB |
+| aarch64 (Neoverse-N1, N2 and Grace hopper) | |
+
+Supported Operating System
+
+| Operating System | Operating System used |
+|---|---|
+| Ubuntu 20/22/24 (realtime kernel) | Ubuntu 24.04.2 LTS (6.11.0-28-generic)|
+| RHEL 9 | |
+| Fedora 41 | |
+| Debian 11 | |
+
+DPU has a customized Ubuntu distribution (uname -a)
+Linux localhost.localdomain 5.15.0-1065-bluefield #67-Ubuntu SMP Tue Apr 22 11:10:15 UTC 2025 aarch64 aarch64 aarch64 GNU/Linux
+
+vlademir@localhost:~$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.5 LTS
+Release:        22.04
+Codename:       jammy
+
+
+the realtime kernel of Ubuntu 24.04 shall be installed
+Disable Hyper-threading (or Simultaneous Multithreading)
+
+[OAI Tutorials](https://gitlab.eurecom.fr/oai/openairinterface5g/-/tree/v2.1.0/doc).
+Check the 5G CN SA Tutorial in [NR SA Tutorial OAI CN5G](https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/develop/doc/NR_SA_Tutorial_OAI_CN5G.md).
+Check the 5G NR SA Tutorial in [NR SA Tutorial COTS UE](https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/v2.1.0/doc/NR_SA_Tutorial_COTS_UE.md).
+Check the nrUE Tutorial in [NR SA Tutorial OAI nrUE](https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/v2.1.0/doc/NR_SA_Tutorial_OAI_nrUE.md)
+
 
 ### OAI-Host Integration
 
@@ -498,7 +543,7 @@ Autovectorization and Intrinsics
 
 Sometimes compilers emit long sequences of SIMD instructions (or multiple fallback code paths for different CPUs), inflating binary size.
 
-👉 In short:
+In short:
 
 Pros: Code bloat sometimes improves speed (fewer branches, more inlined code, better pipelining).
 
@@ -575,6 +620,14 @@ Notes
 
 ---
 ## Experiments
+
+### First thing
+Ensure that the host and DPU are configured with these [Prerequisites](). It is not low-latency kernel anymore, it is realtime kernel now.
+
+host has 64 logical cores, with Hyper-Threadind disabled, it has 32 physical cores.
+
+DPU has 16 physical cores (lscpu)
+
 
 **\[Content on experiments and use cases go here.\]**
 
