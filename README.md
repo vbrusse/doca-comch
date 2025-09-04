@@ -622,7 +622,7 @@ Notes
 ## Experiments
 
 ### First thing
-Ensure that the host and DPU are configured with these [Prerequisites](). It is not low-latency kernel anymore, it is realtime kernel now.
+Ensure that the host and DPU are configured with these [Prerequisites](https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/develop/doc/ORAN_FHI7.2_Tutorial.md). It is not low-latency kernel anymore, it is realtime kernel now.
 
 host has 64 logical cores, with Hyper-Threadind disabled, it has 32 physical cores.
 
