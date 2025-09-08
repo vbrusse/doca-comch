@@ -39,7 +39,7 @@ The purpose of this research project is to investigate the offloading and hw acc
     - [Compiler Optimization Level](#compiler-optimization-level)
 - [Experiments and Measurements](#experiments-and-measurements)
     - [First thing](#first-thing)
-- [Contributing](#contributing)
+- [Contributions](#contributions)
 
 ---
 ## Low-Density Parity-Check (LDPC) Codes
@@ -534,6 +534,11 @@ AVX2 instruction set
 RAM
 Caches
 
+OAI LDPC implementation x ArmRAL LDPC implementation
+    they are differents
+    may implement algorithms differents
+    may lead to faster implemetation
+    
 ### Arm Cortex-A78
 * Arm NEON CPU intrinsics
   * NEON intrinsics - functions mapping to SIMD instructions
@@ -638,6 +643,9 @@ Notes
   * Software parallelized with Pthreads (POSIX Threads) lib - multithreading programming
   * Thread Pool to handle task queue
   * CPU pinning
+  * Compiler Flags
+  * Link Flags
+  * SIMD intrinsics
 
 ---
 ## Experiments and Measurements
@@ -655,7 +663,7 @@ DPU has 16 physical cores (lscpu)
 **\[Content on experiments and use cases go here.\]**
 
 ---
-## Contributing
+## Contributions
 
 **\[Content on contribution guidelines goes here.\]**
 
