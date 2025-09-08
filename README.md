@@ -538,6 +538,7 @@ OAI LDPC implementation x ArmRAL LDPC implementation
     they are differents
     may implement algorithms differents
     may lead to faster implemetation
+    The LDPC Decoder block uses the belief propagation algorithm to decode a binary LDPC code, which is input to the block as the soft-decision output (log-likelihood ratio     of received bits) from demodulation. The block decodes generic binary LDPC codes where no patterns in the parity-check matrix are assumed.
     
 ### Arm Cortex-A78
 * Arm NEON CPU intrinsics
