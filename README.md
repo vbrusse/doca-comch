@@ -3,11 +3,11 @@ The purpose of this research project is to investigate the offloading and hw acc
 
 ## Table of Contents
 - [Low-Density Parity-Check (LDPC) Codes](#low-density-parity-check-ldpc-codes)
-    - [What LDPC Codes are](#what-ldpc-codes-are)
-    - [How They Work](#how-they-work)
-    - [Applications](#applications)
-    - [Comparison with Other Codes](#comparison-with-other-codes)
-    - [Key 3GPP Specifications for 5G NR](#key-3gpp-specifications-for-5g-nr)
+  - [What LDPC Codes are](#what-ldpc-codes-are)
+  - [How They Work](#how-they-work)
+  - [Applications](#applications)
+  - [Comparison with Other Codes](#comparison-with-other-codes)
+  - [Key 3GPP Specifications for 5G NR](#key-3gpp-specifications-for-5g-nr)
 - [Requirements](#requirements)
 - [DOCA SDK](#doca-sdk)
   - [Installation Instructions](#installation-instructions)
@@ -22,23 +22,24 @@ The purpose of this research project is to investigate the offloading and hw acc
   - [Installation of the ArmRAL](#installation-of-the-armral)
   - [DPU-ArmRAL Integration](#dpu-armral-integration)
 - [NVIDIA BlueField-3 DPU](#nvidia-bluefield-3-dpu)
-    - [Technical Specification](#technical-specification)
+  - [Technical Specification](#technical-specification)
 - [OpenAirInterface (OAI)](#openairinterface-oai)
   - [Core Components](#core-components)
   - [OAI and Functional Splits](#oai-and-functional-splits)
   - [O-RAN 7.2x Split](#o-ran-72x-split)
-      - [3GPP Split 2](#3gpp-split-2)
+    - [3GPP Split 2](#3gpp-split-2)
   - [Installation Instructions](#installation-instructions-2)
-      - [5G CN Prerequisites](#5g-cn-prerequisites)
-      - [5G NR Prerequisites](#5g-nr-prerequisites)
+    - [5G CN Prerequisites](#5g-cn-prerequisites)
+    - [5G NR Prerequisites](#5g-nr-prerequisites)
   - [OAI-Host Integration](#oai-host-integration)
   - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-oai-5gc-gnb-and-nrue)
 - [Acceleration Aspects](#acceleration-aspects)
-    - [Arm Cortex-A78](#arm-cortex-a78)
-    - [ArmRAL Characteristics](#armral-characteristics)
-    - [Compiler Optimization Level](#compiler-optimization-level)
+  - [Arm Cortex-A78](#arm-cortex-a78)
+  - [ArmRAL Characteristics](#armral-characteristics)
+  - [Compiler Optimization Level](#compiler-optimization-level)
 - [Experiments and Measurements](#experiments-and-measurements)
-    - [First thing](#first-thing)
+  - [Experimental Setup](#experimental-setup) 
+  - [First thing](#first-thing)
 - [Contributions](#contributions)
 
 ---
@@ -651,7 +652,11 @@ Notes
 ---
 ## Experiments and Measurements
 
-Ensure this [OpenAirKernelMainSetup](https://gitlab.eurecom.fr/oai/openairinterface5g/-/wikis/OpenAirKernelMainSetup#ubuntu-1604-ltslinux-kernel-version-48-or-higher) and if the host is not using any ISA (instruction Set Archirecture) of AVX2-512.
+### Experimental Setup
+
+* The project is not using Cloud RAN and neither CNF deployments in K8s
+  
+* Ensure this [OpenAirKernelMainSetup](https://gitlab.eurecom.fr/oai/openairinterface5g/-/wikis/OpenAirKernelMainSetup#ubuntu-1604-ltslinux-kernel-version-48-or-higher) and if the host is not using any ISA (instruction Set Archirecture) of AVX2-512.
 
 ### First thing
 Ensure that the host and DPU are configured with these [Prerequisites](https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/develop/doc/ORAN_FHI7.2_Tutorial.md). It is not low-latency kernel anymore, it is realtime kernel now.
