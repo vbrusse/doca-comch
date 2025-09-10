@@ -12,7 +12,7 @@ The purpose of this research project is to investigate the offloading and hw acc
 - [DOCA SDK](#doca-sdk)
   - [Installation Instructions](#installation-instructions)
   - [Project Structure](#project-structure)
-  - [Compilation of the Clients and Servers](#compilation-of-the-clients-and-servers)
+  - [ of the Clients and Servers](#-of-the-clients-and-servers)
 - [doca_comch API](#doca_comch-api)
   - [DOCA Comch Data Path Client/Server](#doca-comch-data-path-clientserver)
   - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-clientserver)
@@ -666,7 +666,8 @@ host has 64 logical cores, with Hyper-Threadind disabled, it has 32 physical cor
 DPU has 16 physical cores (lscpu)
 
 
-**\[Content on experiments and use cases go here.\]**
+[ARM NEON Intrinsic Reference](https://developer.arm.com/architectures/instruction-sets/intrinsics/#f:@navigationhierarchiessimdisa=[Neon]) (4344) x
+[Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#avxnewtechs=AVX2) (193)
 
 ---
 ## Contributions
