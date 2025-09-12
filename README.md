@@ -99,21 +99,25 @@ The 3GPP has a series of Technical Specifications (TS) that define every aspect 
       * cmake 3.22.1
       * gcc 11.4.0
       * g++ 11.4.0
+      * meson 0.61.2
+      * ninja 1.10.2
+      * DOCA SDK 3.1.0
       * OpenAirInterface 2025.w31
     * DPU
       * Ubuntu 22.04.5 LTS - 5.15.0-1074-bluefield aarch64 GNU/Linux
       * cmake 3.22.1
       * gcc 11.4.0
       * g++ 11.4.0
+      * meson 0.61.2
+      * ninja 1.13.1
       * DOCA SDK 3.1.0
       * ArmRAL 25.07
 
 * **ArmRAL**
-    * To use the Cyclic Redundancy Check (CRC) functions, the Gold sequence generator, and the convolutional encoder, the library must run on a core that supports the AArch64 PMULL extension (check in lscpu, /proc/cpuinfo)
+    * To use the Cyclic Redundancy Check (CRC) functions, the Gold sequence generator, and the convolutional encoder, the library must run on a core that supports the AArch64 PMULL extension (check with lscpu, /proc/cpuinfo)
 
-* **Linux Ubuntu**
-    * OAI
-        * Linux Low-latency Kernel
+* **OpenAirInterface**
+    * Linux Low-latency/realtime Kernel
 
 ---
 ## DOCA SDK
