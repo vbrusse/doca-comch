@@ -94,9 +94,19 @@ The 3GPP has a series of Technical Specifications (TS) that define every aspect 
     * NVIDIA BlueField-3 DPU - Arm Cortex-A78AE aarch64 16 cores 
 
 * **Software**
-    * DOCA SDK 3.0.0
-    * ArmRAL 25.07
-    * OpenAirInterface 2025.w31
+    * host
+      * Ubuntu 22.04.5 LTS - 5.15.0-25-generic x86_64 GNU/Linux
+      * cmake 3.22.1
+      * gcc 11.4.0
+      * g++ 11.4.0
+      * OpenAirInterface 2025.w31
+    * DPU
+      * Ubuntu 22.04.5 LTS - 5.15.0-1074-bluefield aarch64 GNU/Linux
+      * cmake 3.22.1
+      * gcc 11.4.0
+      * g++ 11.4.0
+      * DOCA SDK 3.1.0
+      * ArmRAL 25.07
 
 * **ArmRAL**
     * To use the Cyclic Redundancy Check (CRC) functions, the Gold sequence generator, and the convolutional encoder, the library must run on a core that supports the AArch64 PMULL extension (check in lscpu, /proc/cpuinfo)
