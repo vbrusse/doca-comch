@@ -335,7 +335,7 @@ The tutorial to build and install the Arm RAN Acceleration Library (ArmRAL) can 
 
 ### Compilation and Building the ArmRAL shared library
 
-The Arm Cortex-A78AE is a 64-bit Armv8.2-A architecture CPU. It is needed a toolchain that can target AArch64 (arm64).
+The Arm Cortex-A78AE is a 64-bit Armv8.2-A architecture CPU. It is needed a toolchain that can target AArch64 (arm64). There is no recommendation to use an Arm specific compiler for AArch64 so the project used GNU gcc/g++ toolchain.
 
 * Compiling on an x86 host for an A78AE target running on Ubuntu, and also for Hipervisor QEMU, use the cross toolchain:
 ```bash
