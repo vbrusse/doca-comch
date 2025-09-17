@@ -422,6 +422,40 @@ An install creates an install_manifest.txt file in the library build directory. 
 ---
 ## NVIDIA BlueField-3 DPU
 
+The BlueField-3 shall be configured with DPU mode.
+
+The host commucates with DPU through service rshim. The service when installed and running creates the interface tmfifo_net0 on the host side.
+sudo apt install rshim
+sudo systemctl status rshim
+sudo systemctl start/restart rshim
+ip a
+sudo cat /dev/rshim0/misc | grep DEV_NAME
+    DEV_NAME        pcie-0000:2a:00.2
+sudo ip addr add 192.168.100.1/30 dev tmfifo_net0
+ip addr show tmfifo_net0
+ping 192.168.100.2
+ssh ubuntu@192.168.100.2
+
+
+To make the service rshim persistent on HOST:
+sudo systemctl enable rshim
+sudo systemctl start rshim
+
+To load rshim module on boot
+echo "rshim" | sudo tee -a /etc/modules
+
+To verify rshim starts on boot
+sudo systemctl is-enabled rshim
+
+Update the Host and DPU netplan.
+
+The Correct Flow:
+1.	Host boots -> rshim service starts -> creates tmfifo_net0 interface
+2.	Host netplan applies -> configures tmfifo_net0 with IP 192.168.100.1/30
+3.	DPU boots -> has tmfifo_net0 interface available
+4.	DPU netplan applies -> configures tmfifo_net0 with IP 192.168.100.2/30
+
+
 ### Technical Specification
 
 The Arm Cortex-A78AE implements the Armv8.2-A architecture baseline with some optional extensions.
@@ -439,6 +473,14 @@ To use the Cyclic Redundancy Check (CRC) functions, the library must run on a co
 
 OpenAirInterface (OAI) is an open-source software platform that provides a complete, software-based implementation of 4G (LTE) and 5G (NR) cellular network standards. It essentially allows to run a full mobile network, from the core network to the radio access network (e.g., base station and user equipment) on standard computing hardware.
 
+
+OAI 5G CN
+
+OAI 5G CN stack elements run on docker containers.
+
+The oai-cn5g interface is created on the host side by Docker's networking service when launching the OAI 5G Core Network containers using the docker-compose file.
+The docker-compose.yaml file for the OpenAirInterface 5G core network defines a custom Docker network. When running docker-compose up, Docker reads this configuration and creates the bridge network on the host with the specified name, which in this case is oai-cn5g. This network acts as a virtual switch, allowing the OAI containers to communicate with each other and the host machine.
+The individual containers (like the UPF, SMF, and AMF) are then connected to this oai-cn5g bridge, which allows them to communicate with a gNB (if it's on a different machine) or other parts of the network, as the host's iptables rules forward traffic to the correct container.
 
 ### Core Components
 
@@ -476,6 +518,11 @@ This is the higher-level split defined by the 3GPP standards body. In this split
 * DU (Distributed Unit): Handles the entire MAC, Radio Link Control (RLC), and PHY layers.
 
 Compared to O-RAN 7.2x, this split requires less intelligence at the cell site (the DU). However, it places greater demands on the fronthaul network (the link between the DU and the Radio Head), as a large amount of raw baseband data needs to be transmitted. While defined by 3GPP, this split is less commonly used in commercial O-RAN deployments than the 7.2x split due to its stricter transport requirements.
+
+CU communicate with DU over the primary interface (br0) of the host. This is the interface that handles the default gateway (10.1.1.1) and is used for internet traffci and default routing.
+
+vlademir@intrig:~$ ip route show default
+default via 10.1.1.1 dev br0 proto dhcp src 10.1.1.246 metric 100
 
 
 ### Installation Instructions
@@ -530,7 +577,13 @@ Check the nrUE Tutorial in [NR SA Tutorial OAI nrUE](https://gitlab.eurecom.fr/o
 
 ### Instantiation of OAI 5GC, gNB and nrUE
 
-**\[Content on how to run OAI 5GC, gNB, and nrUE goes here.\]**
+GTP-U tunnel
+The oaitun_ue1 interface is a tunnel interface created at runtime when the OAI gNB software starts up and successfully connects to the OAI 5G Core Network. Its purpose is to encapsulate user plane traffic (GTP-U) for the User Equipment (UE). The name oaitun_ue1 indicates that it's a dedicated tunnel for a single UE (ue1).
+
+The gNB software creates this interface to route traffic from the core network to the emulated UE. This allows the OAI core network to send and receive data to and from the emulated UE's virtual IP address. The interface is only present as long as the container is running and the gNB is connected to the core network
+
+SCTP tunnel
+
 
 ---
 ## Acceleration Aspects
