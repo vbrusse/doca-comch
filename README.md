@@ -721,6 +721,33 @@ Notes
 ---
 ## Experiments and Measurements
 
+Compilers
+ArmRAL compilation with GNU gcc/g++ toolchain x CLang toolchain (an specific optimizations).
+
+CQI
+CQI (Channel Quality Indicator) is a key metric in 5G New Radio (NR) that provides the gNB (base station) with feedback about the downlink channel quality. It's an integer value, typically ranging from 0 to 15, and is a component of a larger report called Channel State Information (CSI).
+
+Function and Purpose
+The primary function of CQI is to enable link adaptation, a process where the network dynamically adjusts its transmission parameters to optimize data throughput and reliability based on real-time channel conditions. A mobile device (UE) measures the downlink signal, including signal strength, interference, and noise, and then calculates the best possible CQI value it can achieve while maintaining a target Block Error Rate (BLER), usually 10%. A higher CQI value indicates better signal quality and a cleaner channel.
+
+Based on the reported CQI, the gNB selects an appropriate Modulation and Coding Scheme (MCS) to use for the next downlink transmission.
+
+* A low CQI (e.g., 1-3) suggests poor channel conditions. The gNB will choose a more robust MCS with a lower modulation order (like QPSK) and a lower code rate to ensure      the data is received reliably, even at the cost of a lower data rate.
+* A high CQI (e.g., 10-15) suggests excellent channel conditions. The gNB can select a more aggressive MCS with a higher modulation order (like 256-QAM) and a higher code     rate to achieve a much faster data rate.
+
+CQI Reporting in 5G
+In 5G, CQI can be reported in a few different ways, depending on network configuration:
+
+* Periodic Reporting: The UE sends CQI feedback at regular, pre-configured intervals.
+* Aperiodic Reporting: The gNB can explicitly request a CQI report from the UE, often triggered by specific events or scheduling needs.
+* Semi-Persistent Reporting: A combination of the above, where reporting is periodic but can be activated or deactivated by the gNB.
+
+The reporting granularity can also vary:
+
+* Wideband CQI: The UE reports a single CQI value for the entire channel bandwidth.
+* Subband CQI: The UE reports a different CQI value for specific sub-bands within the total bandwidth, allowing for more precise adjustments.
+
+
 ### Experimental Setup
 
 * The project is not using Cloud RAN and neither CNF deployments in K8s
