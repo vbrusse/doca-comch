@@ -33,6 +33,7 @@ The purpose of this research project is to investigate the offloading and hw acc
     - [5G NR Prerequisites](#5g-nr-prerequisites)
   - [OAI-Host Integration](#oai-host-integration)
   - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-oai-5gc-gnb-and-nrue)
+  - [Network Configuration](#network-configuration)
 - [Acceleration Aspects](#acceleration-aspects)
   - [Arm Cortex-A78](#arm-cortex-a78)
   - [ArmRAL Characteristics](#armral-characteristics)
@@ -337,6 +338,9 @@ The tutorial to build and install the Arm RAN Acceleration Library (ArmRAL) can 
 
 The Arm Cortex-A78AE is a 64-bit Armv8.2-A architecture CPU. It is needed a toolchain that can target AArch64 (arm64). There is no recommendation to use an Arm specific compiler for AArch64 so the project used GNU gcc/g++ toolchain.
 
+To build or run ArmRAL it is needed a C/C++ compiler, such as GCC. ArmRAL has been tested with GCC 7.5.0, 8.5.0, 9.5.0, 10.5.0, 11.5.0, 12.4.0, 13.3.0, and 14.2.0. This project used AArch64 based GNU gcc/g++ 13.3.0 toolchain (the AArch64 GCC/G++ 13.3.0 was built and installed on DPU since the gcc/g++ from .bfb image was 11.1.0). CMake version 3.10 or higher.
+Ubuntu 22.04 does not support GNU gcc/g++ 14.2.0
+
 * Compiling on an x86 host for an A78AE target running on Ubuntu, and also for Hipervisor QEMU, use the cross toolchain:
 ```bash
 aarch64-linux-gnu-gcc
@@ -585,6 +589,8 @@ The gNB software creates this interface to route traffic from the core network t
 SCTP tunnel
 
 
+### Network Configuration
+
 ---
 ## Acceleration Aspects
 
@@ -721,8 +727,15 @@ Notes
 ---
 ## Experiments and Measurements
 
+NUMA affinity
+
+RAM specifics comparison - host x DPU
+
 Compilers
 ArmRAL compilation with GNU gcc/g++ toolchain x CLang toolchain (an specific optimizations).
+Binary size
+
+SIMD Instructions Set Architecture (ISA) - x86_64 AVX2 x AArch64 NEON
 
 CQI
 CQI (Channel Quality Indicator) is a key metric in 5G New Radio (NR) that provides the gNB (base station) with feedback about the downlink channel quality. It's an integer value, typically ranging from 0 to 15, and is a component of a larger report called Channel State Information (CSI).
