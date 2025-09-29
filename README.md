@@ -98,17 +98,15 @@ The 3GPP has a series of Technical Specifications (TS) that define every aspect 
     * host
       * Ubuntu 22.04.5 LTS - 5.15.0-25-generic x86_64 GNU/Linux
       * cmake 3.22.1
-      * gcc 11.4.0
-      * g++ 11.4.0
+      * gcc/g++ 11.4.0
       * meson 0.61.2
       * ninja 1.10.2
       * DOCA SDK 3.1.0
       * OpenAirInterface 2025.w31
     * DPU
-      * Ubuntu 22.04.5 LTS - 5.15.0-1074-bluefield aarch64 GNU/Linux
+      * Ubuntu 22.04.5 LTS - 5.15.0-1074-bluefield AArch64 GNU/Linux
       * cmake 3.22.1
-      * gcc 11.4.0
-      * g++ 11.4.0
+      * gcc/g++ 13.3.0
       * meson 0.61.2
       * ninja 1.13.1
       * DOCA SDK 3.1.0
@@ -152,7 +150,7 @@ DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA comp
 |   |           |   ├── common.c
 |   |           |   ├── common.h
 |   |           |   ├── .../
-|   |           |   ├── doca_comch/
+|   |           |   ├── /
 |   |           |   |   ├── comch_ctrl_path_common.c
 |   |           |   |   ├── comch_ctrl_path_common.h
 |   |           |   |   ├── comch_data_path_high_speed_common.c
@@ -191,7 +189,7 @@ DOCA shall be installed on the host or on the BlueField-3 DPU, and the DOCA comp
 |               |   ├── common.c
 |               |   ├── common.h
 |               |   ├── .../
-|               |   ├── doca_comch/
+|               |   ├── /
 |               |   |   ├──
 |               |   |   ├── 
 |               └── tools/
@@ -260,6 +258,9 @@ The library libldpc_armral.so (host side) will be built again when the OAI 5G NR
 ### doca_comch API
 
 DOCA Comch provides a communication channel between client applications on the host and servers on the BlueField Arm. It introduces features such as high-performance data path over the consumer-producer API, as well as working with DOCA progress engine and other standard DOCA Core objects.
+
+DOCA Comm Channel
+DOCA Communication Channel library let you set a direct communication channel between the host and the DPU. The channel is run over RoCE/IB protocol and is not part of the TCP/IP stack.
 
 Benefits of using DOCA Comch:
 
@@ -733,7 +734,7 @@ RAM specifics comparison - host x DPU
 
 Compilers
 ArmRAL compilation with GNU gcc/g++ toolchain x CLang toolchain (an specific optimizations).
-Binary size
+Binary size (executables/libs)
 
 SIMD Instructions Set Architecture (ISA) - x86_64 AVX2 x AArch64 NEON
 
@@ -763,7 +764,7 @@ The reporting granularity can also vary:
 
 ### Experimental Setup
 
-* The project is not using Cloud RAN and neither CNF deployments in K8s
+* The project is not using Cloud RAN and it is not using CNF (Conteinerized Network Function) deployments in K8s and neither VNF.
   
 * Ensure this [OpenAirKernelMainSetup](https://gitlab.eurecom.fr/oai/openairinterface5g/-/wikis/OpenAirKernelMainSetup#ubuntu-1604-ltslinux-kernel-version-48-or-higher) and if the host is not using any ISA (instruction Set Archirecture) of AVX2-512.
 
