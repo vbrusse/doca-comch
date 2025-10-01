@@ -12,7 +12,7 @@ The purpose of this research project is to investigate the offloading and hw acc
 - [DOCA SDK](#doca-sdk)
   - [Installation Instructions](#installation-instructions)
   - [Project Structure](#project-structure)
-  - [ of the Clients and Servers](#-of-the-clients-and-servers)
+  - [Compilation of the Clients and Servers](#compilation-of-the-clients-and-servers)
 - [doca_comch API](#doca_comch-api)
   - [DOCA Comch Data Path Client/Server](#doca-comch-data-path-clientserver)
   - [Running the DOCA Comch Data Path Client/Server](#running-the-doca-comch-data-path-clientserver)
@@ -34,6 +34,7 @@ The purpose of this research project is to investigate the offloading and hw acc
   - [OAI-Host Integration](#oai-host-integration)
   - [Instantiation of OAI 5GC, gNB and nrUE](#instantiation-of-oai-5gc-gnb-and-nrue)
   - [Network Configuration](#network-configuration)
+  - [OAI Scenario/Use Case and Parameters](#oai-scenariouse-case-and-parameters)
 - [Acceleration Aspects](#acceleration-aspects)
   - [Arm Cortex-A78](#arm-cortex-a78)
   - [ArmRAL Characteristics](#armral-characteristics)
@@ -591,6 +592,10 @@ SCTP tunnel
 
 
 ### Network Configuration
+
+### OAI Scenario/Use Case and Parameters
+
+5G SA (Stand Alone)
 
 ---
 ## Acceleration Aspects
