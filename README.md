@@ -603,7 +603,9 @@ SCTP tunnel
 - POSIX Threads (pthreads) - software parallelization
 - Cache alignment
 - Compiler optimizations
-- DOCA SDK (RoCE, dmma, buffer, no copy, ...)
+- CPU pinning
+- NUMA affinity
+- DOCA SDK (RoCE, dmma, buffer, no copy, shared memory, ...)
 - DOCA Comch API (client/server, producer/consumer architecture, multithreading, ...)
 - HW Acceleration - BlueField-3 (16 Arm cores, PCIe channel, 400GB/200GB InfiniBand, ...)
 - SIMD ISA (Instruction Set Architecture) - AVX2 x NEON
