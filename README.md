@@ -600,6 +600,17 @@ SCTP tunnel
 ---
 ## Acceleration Aspects
 
+- POSIX Threads (pthreads) - software parallelization
+- Cache alignment
+- Compiler optimizations
+- DOCA SDK (RoCE, dmma, buffer, no copy, ...)
+- DOCA Comch API (client/server, producer/consumer architecture, multithreading, ...)
+- HW Acceleration - BlueField-3 (16 Arm cores, PCIe channel, 400GB/200GB InfiniBand, ...)
+- SIMD ISA (Instruction Set Architecture) - AVX2 x NEON
+- Arm and Intel intrinsics
+- LDPC implementation (algorithm) in ArmRAL
+
+
 NVIDIA BlueField-3 (Arm Aarch64 NEON-based Architecure)
 Architecture
 Clock
